@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<project>
+	
+	<app title="Shoot" file="Shoot" main="Main" package="com.naokirin.example.shoot" version="1.0.0" company="naokirin" />
+	
+	<window width="600" height="700" fps="60" orientation="portrait" resizable="false" />
+ 	
+	<set name="BUILD_DIR" value="Export" />
+	
+	<classpath name="Source" />
+	
+	<haxelib name="nme" />
+	<haxelib name="actuate" />
+  <haxelib name="keybinding" />
+	
+	<assets path="Assets/images" rename="images" include="*" exclude="Icon*.png" />
+	
+	<ndll name="std" />
+	<ndll name="regexp" />
+	<ndll name="zlib" />
+	<ndll name="nme" haxelib="nme" />
+
+  <haxeflag name="--dead-code-elimination" if="html5" />
+	<haxeflag name="--js-modern" if="html5" />
+	
+</project>
