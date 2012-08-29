@@ -4,21 +4,24 @@ import nme.display.BitmapData;
 import nme.Assets;
 import com.eclecticdesignstudio.control.KeyBinding;
 import nme.ui.Keyboard;
+import nme.Lib;
 
 // 自機クラス
 class MyShip extends Mover {
 
-  static inline var SPEED = 5.0;
+  static inline var SPEED_PER_SECOND = 180.0;
+  public static inline var BULLET_RATE = 10.0;
 
   var windowHeight : Float;
   var windowWidth : Float;
 
   // キーの状態
-  private var pressedUp : Bool;
-  private var pressedDown : Bool;
-  private var pressedLeft : Bool;
-  private var pressedRight : Bool;
+  var pressedUp : Bool;
+  var pressedDown : Bool;
+  var pressedLeft : Bool;
+  var pressedRight : Bool;
 
+  
   public function new ( windowWidth : Float, windowHeight : Float ) {
     this.windowHeight = windowHeight; this.windowWidth = windowWidth;
 
@@ -32,31 +35,25 @@ class MyShip extends Mover {
     pressedDown = false;
     pressedLeft = false;
     pressedRight = false;
-
-
-    KeyBinding.addOnPress (Keyboard.UP, keyboard_onPressUp);
-    KeyBinding.addOnPress (Keyboard.DOWN, keyboard_onPressDown);
-    KeyBinding.addOnRelease (Keyboard.UP, keyboard_onReleaseUp);
-    KeyBinding.addOnRelease (Keyboard.DOWN, keyboard_onReleaseDown);
-    KeyBinding.addOnPress (Keyboard.LEFT, keyboard_onPressLeft);
-    KeyBinding.addOnPress (Keyboard.RIGHT, keyboard_onPressRight);
-    KeyBinding.addOnRelease (Keyboard.LEFT, keyboard_onReleaseLeft);
-    KeyBinding.addOnRelease (Keyboard.RIGHT, keyboard_onReleaseRight);
   }
-
-  private function keyboard_onPressUp () : Void { pressedUp = true; }
-  private function keyboard_onPressDown () : Void { pressedDown = true; }
-  private function keyboard_onReleaseUp () : Void { pressedUp = false; }
-  private function keyboard_onReleaseDown () : Void { pressedDown = false; }
-  private function keyboard_onPressLeft () : Void { pressedLeft = true; }
-  private function keyboard_onPressRight () : Void { pressedRight = true; }
-  private function keyboard_onReleaseLeft () : Void { pressedLeft = false; }
-  private function keyboard_onReleaseRight () : Void { pressedRight = false; }
 
   override public function update () {
-    if (pressedUp && cy >= 0.0) setY (cy - SPEED);
-    if (pressedDown && cy <= windowHeight) setY (cy + SPEED);
-    if (pressedLeft && cx >= 0.0) setX (cx - SPEED);
-    if (pressedRight && cx <= windowWidth) setX (cx + SPEED);
+    if (pressedUp && cy >= 0.0)
+      setY (cy - SPEED_PER_SECOND / Lib.stage.frameRate);
+    if (pressedDown && cy <= windowHeight)
+      setY (cy + SPEED_PER_SECOND / Lib.stage.frameRate);
+    if (pressedLeft && cx >= 0.0)
+      setX (cx - SPEED_PER_SECOND / Lib.stage.frameRate);
+    if (pressedRight && cx <= windowWidth)
+      setX (cx + SPEED_PER_SECOND / Lib.stage.frameRate);
   }
+
+  public function keyboard_onPressUp () : Void { pressedUp = true; }
+  public function keyboard_onPressDown () : Void { pressedDown = true; }
+  public function keyboard_onReleaseUp () : Void { pressedUp = false; }
+  public function keyboard_onReleaseDown () : Void { pressedDown = false; }
+  public function keyboard_onPressLeft () : Void { pressedLeft = true; }
+  public function keyboard_onPressRight () : Void { pressedRight = true; }
+  public function keyboard_onReleaseLeft () : Void { pressedLeft = false; }
+  public function keyboard_onReleaseRight () : Void { pressedRight = false; }
 }

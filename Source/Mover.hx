@@ -29,6 +29,11 @@ class Mover extends Sprite {
     active = true;
 
     setX (x); setY (y);
+
+    hitRange = 0.0;
+    angle = 0.0;
+    scale = 1.0;
+    active = true;
   }
 
   // フレームごとの処理 (サブクラスでオーバーライドする)
