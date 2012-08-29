@@ -157,7 +157,6 @@ class GameScene extends Scene {
         if (enemy.hp <= 0) {
           enemy.active = false;
           enemyFormation.removeEnemy (enemy);
-          trace (score);
           score += enemy.score;
           if (enemyFormation.enemies.length == 0) {
             removeEnemyFormation (enemyFormation);
