@@ -9,14 +9,15 @@ class Bullet extends Mover {
 
   public function new (x:Float, y:Float) {
     
-    var bitmap = new Bitmap (Assets.getBitmapData ("images/Bullet01.png"));
-    var graphic = new Sprite ();
-    graphic.addChild (bitmap);
-
+    createGraphic ("images/Bullet01.png");
     super (x, y, graphic);
+
+    hp = 0;
+    power = 1;
+    hitRange = 10.0;
   }
 
   override public function update () {
-    setY(cy - SPEED_PER_SECOND / Lib.stage.frameRate);
+    setY (cy - SPEED_PER_SECOND / Lib.stage.frameRate);
   }
 }

@@ -22,7 +22,11 @@ class Main extends Sprite {
 	private function this_onEnterFrame (event:Event):Void {
     switch (currentScene.update ()) {
     case Remaining : return;
-    case Next (s) : { Lib.current.removeChild (currentScene); currentScene = s; Lib.current.addChild (currentScene); };
+    case Next (s) : {
+      Lib.current.removeChild (currentScene);
+      currentScene = s;
+      Lib.current.addChild (currentScene);
+    };
     }
 	}
 }

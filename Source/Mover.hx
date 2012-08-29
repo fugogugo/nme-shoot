@@ -1,4 +1,6 @@
 import nme.display.Sprite;
+import nme.display.Bitmap;
+import nme.Assets;
 
 // ゲームオブジェクトのクラス
 class Mover extends Sprite {
@@ -22,6 +24,13 @@ class Mover extends Sprite {
   // 画像
   public var graphic : Sprite;
 
+  // HP
+  public var hp : Int;
+
+  // 攻撃力
+  public var power : Int;
+
+
   public function new (x:Float = 0.0, y:Float = 0.0, image:Sprite) {
     super ();
 
@@ -34,14 +43,16 @@ class Mover extends Sprite {
     angle = 0.0;
     scale = 1.0;
     active = true;
+    hp = 1;
+    power = 1;
   }
 
   // フレームごとの処理 (サブクラスでオーバーライドする)
-  public function update () : Void {
-  }
+  public function update () : Void {}
 
   // 当たり判定 (半径でのみ判定)
   public function isHit (mover : Mover) : Bool {
+    if (!(this.visible && mover.visible)) return false;
     var dx = mover.cx - this.cx;
     var dy = mover.cy - this.cy;
     var hit = mover.hitRange + this.hitRange;
@@ -51,7 +62,7 @@ class Mover extends Sprite {
 
   public function isHitWithArray (movers : Array<Mover>) : Bool {
     for (mover in movers) {
-      if (this.isHit(mover)) return true;
+      if (this.isHit (mover)) return true;
     }
     return false;
   }
@@ -64,6 +75,12 @@ class Mover extends Sprite {
   public function setY (y : Float) {
     this.y = y - graphic.height / 2.0;
     return cy = y;
+  }
+
+  function createGraphic (path : String) {
+    var bitmap = new Bitmap (Assets.getBitmapData (path));
+    graphic = new Sprite ();
+    graphic.addChild (bitmap);
   }
 
 }

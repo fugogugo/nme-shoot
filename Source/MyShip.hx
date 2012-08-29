@@ -25,9 +25,7 @@ class MyShip extends Mover {
   public function new ( windowWidth : Float, windowHeight : Float ) {
     this.windowHeight = windowHeight; this.windowWidth = windowWidth;
 
-    var bitmap = new Bitmap (Assets.getBitmapData ("images/MyShip.png"));
-    var graphic = new Sprite ();
-    graphic.addChild (bitmap);
+    createGraphic ("images/MyShip.png");
 
     super (windowWidth / 2.0, windowHeight - 100.0, graphic);
 
@@ -35,6 +33,9 @@ class MyShip extends Mover {
     pressedDown = false;
     pressedLeft = false;
     pressedRight = false;
+
+    hp = 100;
+    hitRange = 20.0;
   }
 
   override public function update () {
