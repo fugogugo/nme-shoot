@@ -28,7 +28,7 @@ class GameScene extends Scene {
   var frameCountForBullet : Float;
   var pressedFireButton : Bool;
 
-	public function new (?myShip:MyShip, ?score:Int, ?pressedFireButton:Bool) {
+	public function new (?myShip:MyShip, ?score:Int, ?pressedFireButton:Bool, ?bullets:Array<Bullet>) {
 		super ();
 
     if (score == null)
@@ -42,7 +42,13 @@ class GameScene extends Scene {
       this.myShip = myShip;
     addChild ( this.myShip );
 
-    bullets = new Array<Bullet>();
+    if (bullets == null)
+      this.bullets = new Array<Bullet>();
+    else {
+      this.bullets = bullets;
+      for (bullet in bullets)
+        addChild (bullet);
+      }
 
     frameCountForBullet = Lib.stage.frameRate / MyShip.BULLET_RATE;
 
@@ -123,8 +129,8 @@ class GameScene extends Scene {
   function deleteOutsideEnemy () {
     for (enemyFormation in enemyFormations) {
       for (enemy in enemyFormation.enemies) {
-        if ( enemy.cx < -10.0 || enemy.cx > Lib.current.width + 10.0
-             || enemy.cy < -10.0 || enemy.cy > Lib.current.height + 10.0 ) {
+        if ( enemy.cx < -100.0 || enemy.cx > Lib.current.width + 100.0
+             || enemy.cy < -100.0 || enemy.cy > Lib.current.height + 100.0 ) {
           enemyFormation.removeEnemy (enemy);
           if (enemyFormation.enemies.length == 0) removeEnemyFormation (enemyFormation);
         }
