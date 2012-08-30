@@ -26,7 +26,7 @@ class Stage1Scene extends GameScene {
   override public function update () :NextScene {
     super.update ();
     frameCount++;
-    if (frameCount == stageEndSec * Lib.stage.frameRate) {
+    if (frameCount == stageEndSec * Lib.stage.frameRate && myShip.active) {
       var nextStage = new Stage2Scene (myShip, score, pressedFireButton, bullets);
       return Next (nextStage);
     }

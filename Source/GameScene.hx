@@ -40,7 +40,8 @@ class GameScene extends Scene {
       this.myShip = new MyShip();
     else
       this.myShip = myShip;
-    addChild ( this.myShip );
+    if (this.myShip.active)
+      addChild ( this.myShip );
 
     if (bullets == null)
       this.bullets = new Array<Bullet>();
@@ -78,7 +79,9 @@ class GameScene extends Scene {
     deleteOutsideEnemy ();
     for (enemyFormation in enemyFormations) { enemyFormation.update (); }
 
-    updateTextField (myShipHpTextField, "HP:" + Std.string (myShip.hp), 20.0);
+    var hp = myShip.hp;
+    if (hp < 0) hp = 0;
+    updateTextField (myShipHpTextField, "HP:" + Std.string (hp), 20.0);
     updateTextField (scoreTextField, "Score:" + Std.string (score), 0.0);
 
     detectCollision ();
@@ -195,9 +198,11 @@ class GameScene extends Scene {
       }
     }
     
-    for (enemyFormation in enemyFormations) {
-      for (enemy in enemyFormation.enemies) {
-        compute (enemy);
+    if (myShip.active) {
+      for (enemyFormation in enemyFormations) {
+        for (enemy in enemyFormation.enemies) {
+          compute (enemy);
+        }
       }
     }
   }
