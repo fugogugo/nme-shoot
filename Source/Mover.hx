@@ -10,13 +10,13 @@ class Mover extends Sprite {
   public var cy (default, setY) : Float;
 
   // 当たり判定の範囲
-  public var hitRange : Float;
+  public var hitRange (default, null) : Float;
 
   // 角度
-  public var angle : Float;
+  public var angle (default, null) : Float;
 
   // スケール
-  public var scale : Float;
+  public var scale (default, null) : Float;
 
   // アクティブ
   public var active : Bool;
@@ -28,7 +28,7 @@ class Mover extends Sprite {
   public var hp : Int;
 
   // 攻撃力
-  public var power : Int;
+  public var power (default, null) : Int;
 
 
   public function new (x:Float = 0.0, y:Float = 0.0, image:Sprite) {
@@ -52,7 +52,7 @@ class Mover extends Sprite {
 
   // 当たり判定 (半径でのみ判定)
   public function isHit (mover : Mover) : Bool {
-    if (!(this.visible && mover.visible)) return false;
+    if (!(this.active && mover.active)) return false;
     var dx = mover.cx - this.cx;
     var dy = mover.cy - this.cy;
     var hit = mover.hitRange + this.hitRange;

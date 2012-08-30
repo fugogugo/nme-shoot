@@ -26,7 +26,7 @@ class Stage1Scene extends GameScene {
   override public function update () :NextScene {
     super.update ();
     frameCount++;
-    if (frameCount == stageEndSec * Lib.stage.frameRate && GameScene.myShip.active) {
+    if (frameCount >= stageEndSec * Lib.stage.frameRate && GameScene.myShip.active) {
       var nextStage = new Stage2Scene ();
       return Next (nextStage);
     }
@@ -37,8 +37,14 @@ class Stage1Scene extends GameScene {
 
 // Stage2
 class Stage2Scene extends GameScene {
+
+  var frameCount : Int;
+  static var stageEndSec = 12.0;
+  
   public function new () {
     super ();
+
+    frameCount = 0;
 
     addEnemyFormation (new KiteEnemyFormation (130.0, 0.0, 1.0));
     addEnemyFormation (new KiteEnemyFormation (200.0, 0.0, 1.0));
@@ -52,5 +58,16 @@ class Stage2Scene extends GameScene {
     addEnemyFormation (new KiteEnemyFormation (120.0, 0.0, 8.0));
     addEnemyFormation (new KiteEnemyFormation (200.0, 0.0, 9.0));
     addEnemyFormation (new KiteEnemyFormation (350.0, 0.0, 10.0));
+  }
+
+  override public function update () :NextScene {
+    super.update ();
+    frameCount++;
+
+    if (frameCount >= stageEndSec * Lib.stage.frameRate && GameScene.myShip.active) {
+      var nextStage = new Stage2Scene ();
+      return Next (nextStage);
+    }
+    return Remaining;
   }
 }

@@ -22,7 +22,9 @@ class GameScene extends Scene {
   public static var myShipHpTextField : TextField;
   public static var scoreTextField : TextField;
 
-  private var frameCountForBullet : Float;
+  var frameCountForBullet : Float;
+  var windowWidth : Float;
+  var windowHeight : Float;
 
   public function new () {
     super ();
@@ -39,6 +41,9 @@ class GameScene extends Scene {
     addChild ( myShip );
     for (bullet in bullets)
       addChild (bullet);
+
+    for (enemyFormation in enemyFormations)
+      addChild (enemyFormation);
     
     if (myShipHpTextField == null)
       myShipHpTextField = new TextField ();
@@ -47,6 +52,13 @@ class GameScene extends Scene {
     if (scoreTextField == null)
       scoreTextField =new TextField ();
     addChild (scoreTextField);
+
+    #if (js)
+    windowWidth = Lib.current.width; windowHeight = Lib.current.height;
+    #else
+    windowWidth = Lib.initWidth; windowHeight = Lib.initHeight;
+    #end
+
   }
 
   override public function update () : NextScene {
@@ -82,8 +94,8 @@ class GameScene extends Scene {
 
   function deleteOutsideBullet () {
     for (bullet in bullets) {
-      if ( bullet.cx < 0.0 || bullet.cx > Lib.current.width
-           || bullet.cy < 0.0 || bullet.cy > Lib.current.height ) {
+      if ( bullet.cx < 0.0 || bullet.cx > windowWidth
+           || bullet.cy < 0.0 || bullet.cy > windowHeight ) {
         removeBullet (bullet);
       }
     }
@@ -92,10 +104,11 @@ class GameScene extends Scene {
   function deleteOutsideEnemy () {
     for (enemyFormation in enemyFormations) {
       for (enemy in enemyFormation.enemies) {
-        if ( enemy.cx < -100.0 || enemy.cx > Lib.current.width + 100.0
-             || enemy.cy < -100.0 || enemy.cy > Lib.current.height + 100.0 ) {
+        if ( enemy.cx < -50.0 || enemy.cx > windowWidth + 50.0
+             || enemy.cy < -50.0 || enemy.cy > windowHeight + 50.0 ) {
           enemyFormation.removeEnemy (enemy);
-          if (enemyFormation.enemies.length == 0) removeEnemyFormation (enemyFormation);
+          if (enemyFormation.enemies.length <= 0)
+            removeEnemyFormation (enemyFormation);
         }
       }
     }
@@ -130,7 +143,7 @@ class GameScene extends Scene {
           enemy.active = false;
           enemyFormation.removeEnemy (enemy);
           totalScore += enemy.score;
-          if (enemyFormation.enemies.length == 0) {
+          if (enemyFormation.enemies.length <= 0) {
             removeEnemyFormation (enemyFormation);
           }
         }
@@ -179,4 +192,5 @@ class GameScene extends Scene {
     textField.alpha = 30;
     Actuate.tween (textField, 1, { alpha: 1 } ).delay (0.4);
   }
+
 }
