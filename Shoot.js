@@ -1157,7 +1157,6 @@ GameScene.prototype = $extend(Scene.prototype,{
 	}
 	,removeBullet: function(bullet) {
 		HxOverrides.remove(GameScene.bullets,bullet);
-		console.log(GameScene.bullets.length);
 		this.removeChild(bullet);
 	}
 	,deleteOutsideEnemy: function() {
@@ -1654,7 +1653,6 @@ Stage2Scene.prototype = $extend(GameScene.prototype,{
 		GameScene.prototype.update.call(this);
 		this.frameCount++;
 		if(this.frameCount >= Stage2Scene.stageEndSec * nme.Lib.nmeGetStage().jeashGetFrameRate() && GameScene.myShip.active) {
-			GameScene.totalScore += 10000;
 			var nextStage = new Stage2Scene();
 			return NextScene.Next(nextStage);
 		}
