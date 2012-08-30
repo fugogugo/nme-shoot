@@ -3,7 +3,7 @@ import nme.Assets;
 import nme.Lib;
 
 class Bullet extends Mover {
-  private static inline var SPEED_PER_SECOND = 500.0;
+  static inline var SPEED_PER_SECOND = 500.0;
 
   public function new (x:Float, y:Float) {
     
