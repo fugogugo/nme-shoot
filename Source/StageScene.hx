@@ -6,7 +6,7 @@ import nme.Lib;
 class Stage1Scene extends GameScene {
 
   var frameCount : Int;
-  static var stageEndSec = 17.0;
+  static inline var stageEndSec = 17.0;
 
   public function new () {
     super ();
@@ -26,8 +26,8 @@ class Stage1Scene extends GameScene {
   override public function update () :NextScene {
     super.update ();
     frameCount++;
-    if (frameCount == stageEndSec * Lib.stage.frameRate && myShip.active) {
-      var nextStage = new Stage2Scene (myShip, score, pressedFireButton, bullets);
+    if (frameCount == stageEndSec * Lib.stage.frameRate && GameScene.myShip.active) {
+      var nextStage = new Stage2Scene ();
       return Next (nextStage);
     }
     return Remaining;
@@ -37,8 +37,8 @@ class Stage1Scene extends GameScene {
 
 // Stage2
 class Stage2Scene extends GameScene {
-  public function new (myShip:MyShip, score:Int, pressedFireButton:Bool, bullets:Array<Bullet>) {
-    super (myShip, score, pressedFireButton, bullets);
+  public function new () {
+    super ();
 
     addEnemyFormation (new KiteEnemyFormation (130.0, 0.0, 1.0));
     addEnemyFormation (new KiteEnemyFormation (200.0, 0.0, 1.0));

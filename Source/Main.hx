@@ -7,18 +7,19 @@ import StageScene;
 // ゲームを管理するクラス
 class Main extends Sprite {
 
-  private var currentScene : Scene;
+  var currentScene : Scene;
 
-	public function new () {
-		super ();
-		addEventListener ( Event.ENTER_FRAME, this_onEnterFrame );
-
+  public function new () {
+    super ();
+    addEventListener ( Event.ENTER_FRAME, this_onEnterFrame );
+    KeyboardInput.initialize ();
+    
     currentScene = new Stage1Scene ();
     Lib.current.addChild (currentScene);
-	}
+  }
 
   // メインループのメソッド
-	private function this_onEnterFrame (event:Event):Void {
+  function this_onEnterFrame (event:Event):Void {
     switch (currentScene.update ()) {
     case Remaining : return;
     case Next (s) : {
@@ -27,5 +28,5 @@ class Main extends Sprite {
       Lib.current.addChild (currentScene);
     };
     }
-	}
+  }
 }

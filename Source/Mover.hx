@@ -22,7 +22,7 @@ class Mover extends Sprite {
   public var active : Bool;
 
   // 画像
-  public var graphic : Sprite;
+  private var graphic : Sprite;
 
   // HP
   public var hp : Int;
@@ -77,8 +77,7 @@ class Mover extends Sprite {
     return cy = y;
   }
 
-  function setGraphic (path : String) {
+  function setGraphic (path:String) {
     graphic = GraphicCache.loadGraphic (path);
   }
-
 }

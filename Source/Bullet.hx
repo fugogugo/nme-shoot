@@ -1,6 +1,4 @@
 import nme.display.Sprite;
-import nme.display.Bitmap;
-import nme.display.BitmapData;
 import nme.Assets;
 import nme.Lib;
 
