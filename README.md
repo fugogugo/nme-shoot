@@ -30,3 +30,9 @@ http://naokirin.github.com/nme-shoot/
 
 十字キー : 移動
 zキー    : 弾の発射
+
+###License
+Copyright 2012- naokirin  
+
+Licensed under the MIT License  
+http://www.opensource.org/licenses/mit-license.php
