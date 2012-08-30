@@ -106,7 +106,8 @@ class GameScene extends Scene {
 
 
   function fireBullet () {
-    if (pressedFireButton && frameCountForBullet >= Lib.stage.frameRate / MyShip.BULLET_RATE) {
+    if (pressedFireButton && frameCountForBullet >= Lib.stage.frameRate / MyShip.BULLET_RATE
+        && myShip.active) {
       frameCountForBullet = 0;
       var bullet = new Bullet (myShip.cx, myShip.cy - myShip.height / 2.0);
       
