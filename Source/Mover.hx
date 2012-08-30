@@ -77,10 +77,8 @@ class Mover extends Sprite {
     return cy = y;
   }
 
-  function createGraphic (path : String) {
-    var bitmap = new Bitmap (Assets.getBitmapData (path));
-    graphic = new Sprite ();
-    graphic.addChild (bitmap);
+  function setGraphic (path : String) {
+    graphic = GraphicCache.loadGraphic (path);
   }
 
 }

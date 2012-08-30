@@ -25,7 +25,7 @@ class MyShip extends Mover {
   public function new ( windowWidth : Float, windowHeight : Float ) {
     this.windowHeight = windowHeight; this.windowWidth = windowWidth;
 
-    createGraphic ("images/MyShip.png");
+    setGraphic ("images/MyShip.png");
 
     super (windowWidth / 2.0, windowHeight - 100.0, graphic);
 

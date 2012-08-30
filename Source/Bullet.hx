@@ -9,7 +9,7 @@ class Bullet extends Mover {
 
   public function new (x:Float, y:Float) {
     
-    createGraphic ("images/Bullet01.png");
+    setGraphic ("images/Bullet01.png");
     super (x, y, graphic);
 
     hp = 0;

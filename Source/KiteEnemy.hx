@@ -1,13 +1,14 @@
 import nme.Lib;
 import Enemy;
 
+// 凧型の敵
 class KiteEnemy extends Enemy {
   private var speedPerSecond : Float;
 
   private var random : Bool;
 
   public function new (initX : Float, initY : Float, speedPerSecond : Float) {
-    createGraphic ("images/Enemy01.png");
+    setGraphic ("images/Enemy01.png");
     super (initX, initY, graphic);
     hitRange = 10.0;
     hp = 7;

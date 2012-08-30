@@ -68,10 +68,10 @@ class GameScene extends Scene {
 
   override public function update () {
     myShip.update ();
-    createBullet ();
-    deleteBullet ();
+    fireBullet ();
+    deleteOutsideBullet ();
     for (bullet in bullets) { bullet.update (); }
-    deleteEnemy ();
+    deleteOutsideEnemy ();
     for (enemyFormation in enemyFormations) { enemyFormation.update (); }
 
     updateTextField (myShipHpTextField, "HP:" + Std.string (myShip.hp), 20.0);
@@ -101,7 +101,7 @@ class GameScene extends Scene {
   }
 
 
-  function createBullet () {
+  function fireBullet () {
     if (pressedFireButton && frameCountForBullet >= Lib.stage.frameRate / MyShip.BULLET_RATE) {
       frameCountForBullet = 0;
       var bullet = new Bullet (myShip.cx, myShip.cy - myShip.height / 2.0);
@@ -113,7 +113,7 @@ class GameScene extends Scene {
     frameCountForBullet++;
   }
 
-  function deleteBullet () {
+  function deleteOutsideBullet () {
     for (bullet in bullets) {
       if ( bullet.cx < 0.0 || bullet.cx > windowWidth
            || bullet.cy < 0.0 || bullet.cy > windowHeight ) {
@@ -122,7 +122,7 @@ class GameScene extends Scene {
     }
   }
 
-  function deleteEnemy () {
+  function deleteOutsideEnemy () {
     for (enemyFormation in enemyFormations) {
       for (enemy in enemyFormation.enemies) {
         if ( enemy.cx < -10.0 || enemy.cx > windowWidth + 10.0
@@ -192,6 +192,7 @@ class GameScene extends Scene {
     }
   }
 
+  // テキストフィールドの更新
   function updateTextField (textField : TextField, text : String, y : Float) {
 		textField.y = y;
 		textField.text = text;
