@@ -27,3 +27,6 @@ HTML5 の場合
 (HTML5に対応したブラウザが必要になります。)  
   
 http://naokirin.github.com/nme-shoot/
+
+十字キー : 移動
+zキー    : 弾の発射
