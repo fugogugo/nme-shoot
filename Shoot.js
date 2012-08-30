@@ -1067,7 +1067,7 @@ var GameScene = function(myShip,score,pressedFireButton,bullets) {
 	Scene.call(this);
 	if(score == null) this.score = 0; else this.score = score;
 	if(myShip == null) this.myShip = new MyShip(); else this.myShip = myShip;
-	this.addChild(this.myShip);
+	if(this.myShip.active) this.addChild(this.myShip);
 	if(bullets == null) this.bullets = new Array(); else {
 		this.bullets = bullets;
 		var _g = 0;
@@ -1111,15 +1111,17 @@ GameScene.prototype = $extend(Scene.prototype,{
 				}
 			}
 		};
-		var _g1 = 0, _g11 = this.enemyFormations;
-		while(_g1 < _g11.length) {
-			var enemyFormation = _g11[_g1];
-			++_g1;
-			var _g2 = 0, _g3 = enemyFormation.enemies;
-			while(_g2 < _g3.length) {
-				var enemy = _g3[_g2];
-				++_g2;
-				compute(enemy);
+		if(this.myShip.active) {
+			var _g1 = 0, _g11 = this.enemyFormations;
+			while(_g1 < _g11.length) {
+				var enemyFormation = _g11[_g1];
+				++_g1;
+				var _g2 = 0, _g3 = enemyFormation.enemies;
+				while(_g2 < _g3.length) {
+					var enemy = _g3[_g2];
+					++_g2;
+					compute(enemy);
+				}
 			}
 		}
 	}
@@ -1195,7 +1197,7 @@ GameScene.prototype = $extend(Scene.prototype,{
 		}
 	}
 	,fireBullet: function() {
-		if(this.pressedFireButton && this.frameCountForBullet >= nme.Lib.nmeGetStage().jeashGetFrameRate() / 10.0) {
+		if(this.pressedFireButton && this.frameCountForBullet >= nme.Lib.nmeGetStage().jeashGetFrameRate() / 10.0 && this.myShip.active) {
 			this.frameCountForBullet = 0;
 			var bullet = new Bullet(this.myShip.cx,this.myShip.cy - this.myShip.jeashGetHeight() / 2.0);
 			this.bullets.push(bullet);
@@ -1239,7 +1241,9 @@ GameScene.prototype = $extend(Scene.prototype,{
 			++_g;
 			enemyFormation.update();
 		}
-		this.updateTextField(this.myShipHpTextField,"HP:" + Std.string(this.myShip.hp),20.0);
+		var hp = this.myShip.hp;
+		if(hp < 0) hp = 0;
+		this.updateTextField(this.myShipHpTextField,"HP:" + Std.string(hp),20.0);
 		this.updateTextField(this.scoreTextField,"Score:" + Std.string(this.score),0.0);
 		this.detectCollision();
 		return NextScene.Remaining;
@@ -1608,7 +1612,7 @@ Stage1Scene.prototype = $extend(GameScene.prototype,{
 	update: function() {
 		GameScene.prototype.update.call(this);
 		this.frameCount++;
-		if(this.frameCount == Stage1Scene.stageEndSec * nme.Lib.nmeGetStage().jeashGetFrameRate()) {
+		if(this.frameCount == Stage1Scene.stageEndSec * nme.Lib.nmeGetStage().jeashGetFrameRate() && this.myShip.active) {
 			var nextStage = new Stage2Scene(this.myShip,this.score,this.pressedFireButton,this.bullets);
 			return NextScene.Next(nextStage);
 		}
