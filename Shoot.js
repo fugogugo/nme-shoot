@@ -941,10 +941,8 @@ $hxClasses["Mover"] = Mover;
 Mover.__name__ = ["Mover"];
 Mover.__super__ = jeash.display.Sprite;
 Mover.prototype = $extend(jeash.display.Sprite.prototype,{
-	createGraphic: function(path) {
-		var bitmap = new jeash.display.Bitmap(nme.installer.Assets.getBitmapData(path));
-		this.graphic = new jeash.display.Sprite();
-		this.graphic.addChild(bitmap);
+	setGraphic: function(path) {
+		this.graphic = GraphicCache.loadGraphic(path);
 	}
 	,setY: function(y) {
 		this.jeashSetY(y - this.graphic.jeashGetHeight() / 2.0);
@@ -967,7 +965,7 @@ Mover.prototype = $extend(jeash.display.Sprite.prototype,{
 	,__properties__: $extend(jeash.display.Sprite.prototype.__properties__,{set_cx:"setX",set_cy:"setY"})
 });
 var Bullet = function(x,y) {
-	this.createGraphic("images/Bullet01.png");
+	this.setGraphic("images/Bullet01.png");
 	Mover.call(this,x,y,this.graphic);
 	this.hp = 0;
 	this.power = 1;
@@ -1021,7 +1019,7 @@ Enemy.prototype = $extend(Mover.prototype,{
 var EnemyFormation = function() {
 	this.enemies = new Array();
 	this.graphic = new jeash.display.Sprite();
-	this.appearSec = 0.0;
+	this.appearanceSec = 0.0;
 	this.frameCount = 0;
 	Enemy.call(this,0.0,0.0,this.graphic);
 	this.jeashSetVisible(false);
@@ -1039,7 +1037,7 @@ EnemyFormation.prototype = $extend(Enemy.prototype,{
 		this.addChild(enemy);
 	}
 	,update: function() {
-		if(this.appearSec <= this.frameCount / nme.Lib.nmeGetStage().jeashGetFrameRate()) {
+		if(this.appearanceSec <= this.frameCount / nme.Lib.nmeGetStage().jeashGetFrameRate()) {
 			if(!this.jeashGetVisible()) this.jeashSetVisible(true);
 			var _g = 0, _g1 = this.enemies;
 			while(_g < _g1.length) {
@@ -1065,33 +1063,24 @@ Scene.prototype = $extend(jeash.display.Sprite.prototype,{
 	}
 	,__class__: Scene
 });
-var GameScene = function(windowWidth,windowHeight) {
+var GameScene = function(myShip,score,pressedFireButton,bullets) {
 	Scene.call(this);
-	this.windowWidth = windowWidth;
-	this.windowHeight = windowHeight;
-	this.score = 0;
-	this.myShip = new MyShip(this.windowWidth,this.windowHeight);
+	if(score == null) this.score = 0; else this.score = score;
+	if(myShip == null) this.myShip = new MyShip(); else this.myShip = myShip;
 	this.addChild(this.myShip);
-	this.bullets = new Array();
-	this.frameCountForBullet = nme.Lib.nmeGetStage().jeashGetFrameRate() / 10.0;
-	this.pressedFireButton = false;
-	this.enemyFormations = new Array();
-	this.enemyFormations.push(new KiteEnemyFormation(150.0,0.0,2.0));
-	this.enemyFormations.push(new KiteEnemyFormation(300.0,0.0,2.0));
-	this.enemyFormations.push(new KiteEnemyFormation(250.0,0.0,5.0));
-	this.enemyFormations.push(new KiteEnemyFormation(200.0,0.0,6.0));
-	this.enemyFormations.push(new KiteEnemyFormation(150.0,0.0,7.0));
-	this.enemyFormations.push(new KiteEnemyFormation(250.0,0.0,8.0));
-	this.enemyFormations.push(new KiteEnemyFormation(150.0,0.0,9.0));
-	this.enemyFormations.push(new KiteEnemyFormation(300.0,0.0,10.0));
-	var _g = 0, _g1 = this.enemyFormations;
-	while(_g < _g1.length) {
-		var enemyFormation = _g1[_g];
-		++_g;
-		this.addChild(enemyFormation);
-		enemyFormation.jeashSetVisible(false);
+	if(bullets == null) this.bullets = new Array(); else {
+		this.bullets = bullets;
+		var _g = 0;
+		while(_g < bullets.length) {
+			var bullet = bullets[_g];
+			++_g;
+			this.addChild(bullet);
+		}
 	}
-	this.registerKeyEvent();
+	this.frameCountForBullet = nme.Lib.nmeGetStage().jeashGetFrameRate() / 10.0;
+	if(pressedFireButton == null) this.pressedFireButton = false; else this.pressedFireButton = pressedFireButton;
+	this.enemyFormations = new Array();
+	this.registerKeyEvents();
 	this.myShipHpTextField = new jeash.text.TextField();
 	this.addChild(this.myShipHpTextField);
 	this.scoreTextField = new jeash.text.TextField();
@@ -1143,7 +1132,6 @@ GameScene.prototype = $extend(Scene.prototype,{
 				if(enemy.hp <= 0) {
 					enemy.active = false;
 					enemyFormation.removeEnemy(enemy);
-					console.log(_g.score);
 					_g.score += enemy.score;
 					if(enemyFormation.enemies.length == 0) _g.removeEnemyFormation(enemyFormation);
 				}
@@ -1174,11 +1162,15 @@ GameScene.prototype = $extend(Scene.prototype,{
 		HxOverrides.remove(this.enemyFormations,enemyFormation);
 		this.removeChild(enemyFormation);
 	}
+	,addEnemyFormation: function(enemyFormation) {
+		this.enemyFormations.push(enemyFormation);
+		this.addChild(enemyFormation);
+	}
 	,removeBullet: function(bullet) {
 		HxOverrides.remove(this.bullets,bullet);
 		this.removeChild(bullet);
 	}
-	,deleteEnemy: function() {
+	,deleteOutsideEnemy: function() {
 		var _g = 0, _g1 = this.enemyFormations;
 		while(_g < _g1.length) {
 			var enemyFormation = _g1[_g];
@@ -1187,22 +1179,22 @@ GameScene.prototype = $extend(Scene.prototype,{
 			while(_g2 < _g3.length) {
 				var enemy = _g3[_g2];
 				++_g2;
-				if(enemy.cx < -10. || enemy.cx > this.windowWidth + 10.0 || enemy.cy < -10. || enemy.cy > this.windowHeight + 10.0) {
+				if(enemy.cx < -100. || enemy.cx > nme.Lib.nmeGetCurrent().jeashGetWidth() + 100.0 || enemy.cy < -100. || enemy.cy > nme.Lib.nmeGetCurrent().jeashGetHeight() + 100.0) {
 					enemyFormation.removeEnemy(enemy);
 					if(enemyFormation.enemies.length == 0) this.removeEnemyFormation(enemyFormation);
 				}
 			}
 		}
 	}
-	,deleteBullet: function() {
+	,deleteOutsideBullet: function() {
 		var _g = 0, _g1 = this.bullets;
 		while(_g < _g1.length) {
 			var bullet = _g1[_g];
 			++_g;
-			if(bullet.cx < 0.0 || bullet.cx > this.windowWidth || bullet.cy < 0.0 || bullet.cy > this.windowHeight) this.removeBullet(bullet);
+			if(bullet.cx < 0.0 || bullet.cx > nme.Lib.nmeGetCurrent().jeashGetWidth() || bullet.cy < 0.0 || bullet.cy > nme.Lib.nmeGetCurrent().jeashGetHeight()) this.removeBullet(bullet);
 		}
 	}
-	,createBullet: function() {
+	,fireBullet: function() {
 		if(this.pressedFireButton && this.frameCountForBullet >= nme.Lib.nmeGetStage().jeashGetFrameRate() / 10.0) {
 			this.frameCountForBullet = 0;
 			var bullet = new Bullet(this.myShip.cx,this.myShip.cy - this.myShip.jeashGetHeight() / 2.0);
@@ -1212,7 +1204,7 @@ GameScene.prototype = $extend(Scene.prototype,{
 		if(!this.pressedFireButton) this.frameCountForBullet = nme.Lib.nmeGetStage().jeashGetFrameRate() / 10.0;
 		this.frameCountForBullet++;
 	}
-	,registerKeyEvent: function() {
+	,registerKeyEvents: function() {
 		com.eclecticdesignstudio.control.KeyBinding.addOnPress(jeash.ui.Keyboard.UP,($_=this.myShip,$bind($_,$_.keyboard_onPressUp)));
 		com.eclecticdesignstudio.control.KeyBinding.addOnPress(jeash.ui.Keyboard.DOWN,($_=this.myShip,$bind($_,$_.keyboard_onPressDown)));
 		com.eclecticdesignstudio.control.KeyBinding.addOnRelease(jeash.ui.Keyboard.UP,($_=this.myShip,$bind($_,$_.keyboard_onReleaseUp)));
@@ -1232,15 +1224,15 @@ GameScene.prototype = $extend(Scene.prototype,{
 	}
 	,update: function() {
 		this.myShip.update();
-		this.createBullet();
-		this.deleteBullet();
+		this.fireBullet();
+		this.deleteOutsideBullet();
 		var _g = 0, _g1 = this.bullets;
 		while(_g < _g1.length) {
 			var bullet = _g1[_g];
 			++_g;
 			bullet.update();
 		}
-		this.deleteEnemy();
+		this.deleteOutsideEnemy();
 		var _g = 0, _g1 = this.enemyFormations;
 		while(_g < _g1.length) {
 			var enemyFormation = _g1[_g];
@@ -1267,6 +1259,9 @@ Hash.prototype = {
 		}
 		return HxOverrides.iter(a);
 	}
+	,exists: function(key) {
+		return this.h.hasOwnProperty("$" + key);
+	}
 	,get: function(key) {
 		return this.h["$" + key];
 	}
@@ -1274,6 +1269,21 @@ Hash.prototype = {
 		this.h["$" + key] = value;
 	}
 	,__class__: Hash
+}
+var GraphicCache = function() { }
+$hxClasses["GraphicCache"] = GraphicCache;
+GraphicCache.__name__ = ["GraphicCache"];
+GraphicCache.loadGraphic = function(path,cache) {
+	if(cache == null) cache = true;
+	var bitmap;
+	var bitmapData;
+	if(cache) {
+		if(!GraphicCache.graphicCache.exists(path)) GraphicCache.graphicCache.set(path,nme.installer.Assets.getBitmapData(path));
+		bitmap = new jeash.display.Bitmap(GraphicCache.graphicCache.get(path));
+	} else bitmap = new jeash.display.Bitmap(nme.installer.Assets.getBitmapData(path));
+	var sprite = new jeash.display.Sprite();
+	sprite.addChild(bitmap);
+	return sprite;
 }
 var HxOverrides = function() { }
 $hxClasses["HxOverrides"] = HxOverrides;
@@ -1356,7 +1366,7 @@ IntHash.prototype = {
 	,__class__: IntHash
 }
 var KiteEnemy = function(initX,initY,speedPerSecond) {
-	this.createGraphic("images/Enemy01.png");
+	this.setGraphic("images/Enemy01.png");
 	Enemy.call(this,initX,initY,this.graphic);
 	this.hitRange = 10.0;
 	this.hp = 7;
@@ -1374,11 +1384,11 @@ KiteEnemy.prototype = $extend(Enemy.prototype,{
 	}
 	,__class__: KiteEnemy
 });
-var KiteEnemyFormation = function(initX,initY,appearSec) {
+var KiteEnemyFormation = function(initX,initY,appearanceSec) {
 	EnemyFormation.call(this);
 	this.relativeX = initX;
 	this.relativeY = initY;
-	this.appearSec = appearSec;
+	this.appearanceSec = appearanceSec;
 	this.addEnemy(new KiteEnemy(this.relativeX,this.relativeY,Std.random(50) + 100.0));
 	this.addEnemy(new KiteEnemy(this.relativeX + 60.0,this.relativeY + 20.0,Std.random(50) + 130.0));
 	this.addEnemy(new KiteEnemy(this.relativeX + 120.0,this.relativeY + 10.0,Std.random(50) + 110.0));
@@ -1406,7 +1416,7 @@ List.prototype = {
 var Main = function() {
 	jeash.display.Sprite.call(this);
 	this.addEventListener(jeash.events.Event.ENTER_FRAME,$bind(this,this.this_onEnterFrame));
-	this.currentScene = new GameScene(600.0,700.0);
+	this.currentScene = new Stage1Scene();
 	nme.Lib.nmeGetCurrent().addChild(this.currentScene);
 };
 $hxClasses["Main"] = Main;
@@ -1428,11 +1438,11 @@ Main.prototype = $extend(jeash.display.Sprite.prototype,{
 	}
 	,__class__: Main
 });
-var MyShip = function(windowWidth,windowHeight) {
-	this.windowHeight = windowHeight;
-	this.windowWidth = windowWidth;
-	this.createGraphic("images/MyShip.png");
-	Mover.call(this,windowWidth / 2.0,windowHeight - 100.0,this.graphic);
+var MyShip = function() {
+	this.setGraphic("images/MyShip.png");
+	this.windowWidth = nme.Lib.nmeGetCurrent().jeashGetWidth();
+	this.windowHeight = nme.Lib.nmeGetCurrent().jeashGetHeight();
+	Mover.call(this,this.windowWidth / 2.0,this.windowHeight - 100.0,this.graphic);
 	this.pressedUp = false;
 	this.pressedDown = false;
 	this.pressedLeft = false;
@@ -1579,6 +1589,54 @@ NextScene.Remaining = ["Remaining",0];
 NextScene.Remaining.toString = $estr;
 NextScene.Remaining.__enum__ = NextScene;
 NextScene.Next = function(s) { var $x = ["Next",1,s]; $x.__enum__ = NextScene; $x.toString = $estr; return $x; }
+var Stage1Scene = function() {
+	GameScene.call(this);
+	this.frameCount = 0;
+	this.addEnemyFormation(new KiteEnemyFormation(50.0,0.0,2.0));
+	this.addEnemyFormation(new KiteEnemyFormation(200.0,0.0,2.0));
+	this.addEnemyFormation(new KiteEnemyFormation(250.0,0.0,5.0));
+	this.addEnemyFormation(new KiteEnemyFormation(200.0,0.0,6.0));
+	this.addEnemyFormation(new KiteEnemyFormation(150.0,0.0,7.0));
+	this.addEnemyFormation(new KiteEnemyFormation(250.0,0.0,8.0));
+	this.addEnemyFormation(new KiteEnemyFormation(150.0,0.0,9.0));
+	this.addEnemyFormation(new KiteEnemyFormation(350.0,0.0,10.0));
+};
+$hxClasses["Stage1Scene"] = Stage1Scene;
+Stage1Scene.__name__ = ["Stage1Scene"];
+Stage1Scene.__super__ = GameScene;
+Stage1Scene.prototype = $extend(GameScene.prototype,{
+	update: function() {
+		GameScene.prototype.update.call(this);
+		this.frameCount++;
+		if(this.frameCount == Stage1Scene.stageEndSec * nme.Lib.nmeGetStage().jeashGetFrameRate()) {
+			var nextStage = new Stage2Scene(this.myShip,this.score,this.pressedFireButton,this.bullets);
+			return NextScene.Next(nextStage);
+		}
+		return NextScene.Remaining;
+	}
+	,__class__: Stage1Scene
+});
+var Stage2Scene = function(myShip,score,pressedFireButton,bullets) {
+	GameScene.call(this,myShip,score,pressedFireButton,bullets);
+	this.addEnemyFormation(new KiteEnemyFormation(130.0,0.0,1.0));
+	this.addEnemyFormation(new KiteEnemyFormation(200.0,0.0,1.0));
+	this.addEnemyFormation(new KiteEnemyFormation(300.0,0.0,1.0));
+	this.addEnemyFormation(new KiteEnemyFormation(150.0,0.0,2.0));
+	this.addEnemyFormation(new KiteEnemyFormation(320.0,0.0,2.0));
+	this.addEnemyFormation(new KiteEnemyFormation(250.0,0.0,4.0));
+	this.addEnemyFormation(new KiteEnemyFormation(200.0,0.0,5.0));
+	this.addEnemyFormation(new KiteEnemyFormation(150.0,0.0,6.0));
+	this.addEnemyFormation(new KiteEnemyFormation(260.0,0.0,7.0));
+	this.addEnemyFormation(new KiteEnemyFormation(120.0,0.0,8.0));
+	this.addEnemyFormation(new KiteEnemyFormation(200.0,0.0,9.0));
+	this.addEnemyFormation(new KiteEnemyFormation(350.0,0.0,10.0));
+};
+$hxClasses["Stage2Scene"] = Stage2Scene;
+Stage2Scene.__name__ = ["Stage2Scene"];
+Stage2Scene.__super__ = GameScene;
+Stage2Scene.prototype = $extend(GameScene.prototype,{
+	__class__: Stage2Scene
+});
 var Std = function() { }
 $hxClasses["Std"] = Std;
 Std.__name__ = ["Std"];
@@ -6532,6 +6590,8 @@ js.XMLHttpRequest = window.XMLHttpRequest?XMLHttpRequest:window.ActiveXObject?fu
 	throw "Unable to create XMLHttpRequest object.";
 	return $r;
 }(this));
+GraphicCache.graphicCache = new Hash();
+Stage1Scene.stageEndSec = 17.0;
 com.eclecticdesignstudio.control.KeyBinding.keyPressed = new IntHash();
 com.eclecticdesignstudio.control.KeyBinding.pressBindings = new IntHash();
 com.eclecticdesignstudio.control.KeyBinding.releaseBindings = new IntHash();
