@@ -12,8 +12,8 @@ class MyShip extends Mover {
   static inline var SPEED_PER_SECOND = 180.0;
   public static inline var BULLET_RATE = 10.0;
 
-  var windowHeight : Float;
   var windowWidth : Float;
+  var windowHeight : Float;
 
   // キーの状態
   var pressedUp : Bool;
@@ -22,12 +22,17 @@ class MyShip extends Mover {
   var pressedRight : Bool;
 
   
-  public function new ( windowWidth : Float, windowHeight : Float ) {
-    this.windowHeight = windowHeight; this.windowWidth = windowWidth;
+  public function new () {
 
     setGraphic ("images/MyShip.png");
 
+    #if (html5 || js)
+    windowWidth = Lib.current.width; windowHeight = Lib.current.height;
+    #else
+    windowWidth = Lib.initWidth; windowHeight = Lib.initHeight;
+    #end
     super (windowWidth / 2.0, windowHeight - 100.0, graphic);
+
 
     pressedUp = false;
     pressedDown = false;

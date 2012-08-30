@@ -10,7 +10,6 @@ import nme.text.TextFormatAlign;
 import com.eclecticdesignstudio.motion.Actuate;
 
 import Enemy;
-import KiteEnemy;
 
 // ゲームのシーンクラス
 class GameScene extends Scene {
@@ -29,33 +28,32 @@ class GameScene extends Scene {
   var frameCountForBullet : Float;
   var pressedFireButton : Bool;
 
-	public function new (windowWidth : Float, windowHeight : Float) {
+	public function new (?myShip:MyShip, ?score:Int, ?pressedFireButton:Bool) {
 		super ();
 
-    this.windowWidth = windowWidth; this.windowHeight = windowHeight;
+    if (score == null)
+      this.score = 0;
+    else
+      this.score = score;
 
-    score = 0;
-
-    myShip = new MyShip( this.windowWidth, this.windowHeight );
-    addChild ( myShip );
+    if (myShip == null)
+      this.myShip = new MyShip();
+    else
+      this.myShip = myShip;
+    addChild ( this.myShip );
 
     bullets = new Array<Bullet>();
 
     frameCountForBullet = Lib.stage.frameRate / MyShip.BULLET_RATE;
-    pressedFireButton = false;
+
+    if (pressedFireButton == null)
+      this.pressedFireButton = false;
+    else
+      this.pressedFireButton = pressedFireButton;
 
     enemyFormations = new Array<EnemyFormation> ();
-    enemyFormations.push (new KiteEnemyFormation (150.0, 0.0, 2.0));
-    enemyFormations.push (new KiteEnemyFormation (300.0, 0.0, 2.0));
-    enemyFormations.push (new KiteEnemyFormation (250.0, 0.0, 5.0));
-    enemyFormations.push (new KiteEnemyFormation (200.0, 0.0, 6.0));
-    enemyFormations.push (new KiteEnemyFormation (150.0, 0.0, 7.0));
-    enemyFormations.push (new KiteEnemyFormation (250.0, 0.0, 8.0));
-    enemyFormations.push (new KiteEnemyFormation (150.0, 0.0, 9.0));
-    enemyFormations.push (new KiteEnemyFormation (300.0, 0.0, 10.0));
-    for (enemyFormation in enemyFormations) { addChild (enemyFormation); enemyFormation.visible = false; }
-
-    registerKeyEvent ();
+    
+    registerKeyEvents ();
 
     // 自機のHPの表示
     myShipHpTextField = new TextField ();
@@ -66,7 +64,7 @@ class GameScene extends Scene {
     addChild (scoreTextField);
   }
 
-  override public function update () {
+  override public function update () : NextScene {
     myShip.update ();
     fireBullet ();
     deleteOutsideBullet ();
@@ -86,7 +84,7 @@ class GameScene extends Scene {
   function keyboard_onReleaseFireButton () : Void { pressedFireButton = false; }
 
   // キーイベントの登録
-  function registerKeyEvent () {
+  function registerKeyEvents () {
     KeyBinding.addOnPress (Keyboard.UP, myShip.keyboard_onPressUp);
     KeyBinding.addOnPress (Keyboard.DOWN, myShip.keyboard_onPressDown);
     KeyBinding.addOnRelease (Keyboard.UP, myShip.keyboard_onReleaseUp);
@@ -115,8 +113,8 @@ class GameScene extends Scene {
 
   function deleteOutsideBullet () {
     for (bullet in bullets) {
-      if ( bullet.cx < 0.0 || bullet.cx > windowWidth
-           || bullet.cy < 0.0 || bullet.cy > windowHeight ) {
+      if ( bullet.cx < 0.0 || bullet.cx > Lib.current.width
+           || bullet.cy < 0.0 || bullet.cy > Lib.current.height ) {
         removeBullet (bullet);
       }
     }
@@ -125,8 +123,8 @@ class GameScene extends Scene {
   function deleteOutsideEnemy () {
     for (enemyFormation in enemyFormations) {
       for (enemy in enemyFormation.enemies) {
-        if ( enemy.cx < -10.0 || enemy.cx > windowWidth + 10.0
-             || enemy.cy < -10.0 || enemy.cy > windowHeight + 10.0 ) {
+        if ( enemy.cx < -10.0 || enemy.cx > Lib.current.width + 10.0
+             || enemy.cy < -10.0 || enemy.cy > Lib.current.height + 10.0 ) {
           enemyFormation.removeEnemy (enemy);
           if (enemyFormation.enemies.length == 0) removeEnemyFormation (enemyFormation);
         }
@@ -137,6 +135,11 @@ class GameScene extends Scene {
   function removeBullet (bullet : Bullet) {
     bullets.remove (bullet);
     removeChild (bullet);
+  }
+
+  function addEnemyFormation (enemyFormation : EnemyFormation) {
+    enemyFormations.push (enemyFormation);
+    addChild (enemyFormation);
   }
 
   function removeEnemyFormation (enemyFormation : EnemyFormation) {

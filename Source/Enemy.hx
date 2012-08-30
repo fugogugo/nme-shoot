@@ -20,13 +20,13 @@ class Enemy extends Mover {
 class EnemyFormation extends Enemy {
 
   public var enemies (default, null) : Array<Enemy>;
-  var appearSec (default, null) : Float;
+  var appearanceSec (default, null) : Float;
   var frameCount : Int;
 
   function new () {
     enemies = new Array<Enemy> ();
     graphic = new Sprite ();
-    appearSec = 0.0;
+    appearanceSec = 0.0;
     frameCount = 0;
     super (0.0, 0.0, graphic);
     visible = false;
@@ -34,7 +34,7 @@ class EnemyFormation extends Enemy {
 
   override public function update () {
 
-    if (appearSec <= frameCount / Lib.stage.frameRate) {
+    if (appearanceSec <= frameCount / Lib.stage.frameRate) {
       if (!visible) visible = true;
       for (enemy in enemies) {
         enemy.update ();

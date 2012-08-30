@@ -2,11 +2,10 @@ import nme.display.Sprite;
 import nme.events.Event;
 import nme.Lib;
 
+import StageScene;
+
 // ゲームを管理するクラス
 class Main extends Sprite {
-
-  static inline var windowWidth = 600.0;
-  static inline var windowHeight = 700.0;
 
   private var currentScene : Scene;
 
@@ -14,7 +13,7 @@ class Main extends Sprite {
 		super ();
 		addEventListener ( Event.ENTER_FRAME, this_onEnterFrame );
 
-    currentScene = new GameScene ( windowWidth, windowHeight );
+    currentScene = new Stage1Scene ();
     Lib.current.addChild (currentScene);
 	}
 

@@ -31,13 +31,13 @@ class KiteEnemyFormation extends EnemyFormation {
   var relativeX : Float;
   var relativeY : Float;
   
-  public function new (initX : Float, initY : Float, appearSec : Float) {
+  public function new (initX : Float, initY : Float, appearanceSec : Float) {
 
     super ();
 
     relativeX = initX;
     relativeY = initY;
-    this.appearSec = appearSec;
+    this.appearanceSec = appearanceSec;
 
     addEnemy ( new KiteEnemy (relativeX, relativeY, Std.random (50) + 100.0));
     addEnemy ( new KiteEnemy (relativeX + 60.0, relativeY + 20.0, Std.random (50) + 130.0));
