@@ -16,6 +16,8 @@ class Main extends Sprite {
     
     currentScene = new Stage1Scene ();
     Lib.current.addChild (currentScene);
+
+    width = 600.0; height = 700.0;
   }
 
   // メインループのメソッド

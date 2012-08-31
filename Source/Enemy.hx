@@ -13,7 +13,7 @@ class Enemy extends Mover {
     this.graphic = graphic;
 
     super (initX, initY, graphic);
-    visible = true;
+    visible = false;
     active = false;
   }
 }
@@ -38,16 +38,21 @@ class EnemyFormation extends Enemy {
   override public function update () {
 
     if (appearanceSec <= frameCount / Lib.stage.frameRate) {
-      active = true;
-      visible = true;
+
       for (enemy in enemies) {
+        enemy.visible = true;
         enemy.active = true;
         enemy.update ();
-     
         if (!enemy.active) removeEnemy (enemy);
       }
+      active = true;
+      visible = true;
     }
-    else visible = false;
+    else {
+      visible = false;
+      for (enemy in enemies)
+        enemy.visible = false;
+    }
     frameCount++;
   }
 

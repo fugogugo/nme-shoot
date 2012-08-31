@@ -17,11 +17,7 @@ class MyShip extends Mover {
     
     setGraphic ("images/MyShip.png");
     
-    #if (js)
-    windowWidth = Lib.current.width; windowHeight = Lib.current.height;
-    #else
-    windowWidth = Lib.initWidth; windowHeight = Lib.initHeight;
-    #end
+    windowWidth = Common.width; windowHeight = Common.height;
     
     super (windowWidth / 2.0, windowHeight - 100.0, graphic);
     hp = 100;

@@ -60,13 +60,6 @@ class Mover extends Sprite {
     return dx*dx + dy*dy < hit*hit;
   }
 
-  public function isHitWithArray (movers : Array<Mover>) : Bool {
-    for (mover in movers) {
-      if (this.isHit (mover)) return true;
-    }
-    return false;
-  }
-
   public function setX (x : Float) {
     this.x = x - graphic.width / 2.0;
     return cx = x;

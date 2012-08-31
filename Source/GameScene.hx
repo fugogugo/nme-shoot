@@ -53,15 +53,11 @@ class GameScene extends Scene {
       scoreTextField =new TextField ();
     addChild (scoreTextField);
 
-    #if (js)
-    windowWidth = Lib.current.width; windowHeight = Lib.current.height;
-    #else
-    windowWidth = Lib.initWidth; windowHeight = Lib.initHeight;
-    #end
-
+    windowWidth = Common.width; windowHeight = Common.height;
   }
 
   override public function update () : NextScene {
+
     myShip.update ();
     fireBullet ();
     deleteOutsideBullet ();
@@ -75,7 +71,7 @@ class GameScene extends Scene {
     updateTextField (scoreTextField, "Score:" + Std.string (totalScore), 0.0);
 
     detectCollision ();
-    
+
     return Remaining;
   }
 
