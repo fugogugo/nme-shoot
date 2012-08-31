@@ -16,12 +16,18 @@ Windows の場合
 
     nme setup windows  
     nme test Shoot.nmml windows  
-
+  
 HTML5 の場合  
 
     nme setup html5  
     nme test Shoot.nmml html5  
   
+Flash の場合  
+
+    nme build Shoot.nmml flash
+
+Export/flash/bin以下のShoot.swfファイルを実行
+
 ###サンプル  
 次のページにflashバージョンがあります。  
   
