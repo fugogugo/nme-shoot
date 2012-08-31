@@ -23,12 +23,11 @@ HTML5 の場合
     nme test Shoot.nmml html5  
   
 ###サンプル  
-次のページにHTML5バージョンがあります。  
-(HTML5に対応したブラウザが必要になります。)  
+次のページにflashバージョンがあります。  
   
 http://naokirin.github.com/nme-shoot/
 
-十字キー : 移動
+十字キー : 移動  
 zキー    : 弾の発射
 
 ###License
