@@ -7,22 +7,22 @@ Haxe [>= 2.10]
 NME  [>= 3.4.0]  
 
 ###ビルド & 実行
-Mac OS X の場合  
+-Mac OS X の場合  
 
     nme setup mac  
     nme test Shoot.nmml mac  
   
-Windows の場合  
+-Windows の場合  
 
     nme setup windows  
     nme test Shoot.nmml windows  
   
-HTML5 の場合  
+-HTML5 の場合  
 
     nme setup html5  
     nme test Shoot.nmml html5  
   
-Flash の場合  
+-Flash の場合  
 
     nme build Shoot.nmml flash
 
