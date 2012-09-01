@@ -65,10 +65,11 @@ class GameScene extends Scene {
     deleteOutsideEnemy ();
     for (enemyFormation in enemyFormations) { enemyFormation.update (); }
 
+
+    // 自機のHPとスコアの表示
     var hp = myShip.hp;
-    if (hp < 0) hp = 0;
-    updateTextField (myShipHpTextField, "HP:" + Std.string (hp), 20.0);
-    updateTextField (scoreTextField, "Score:" + Std.string (totalScore), 0.0);
+    updateTextField (myShipHpTextField, "HP:" + Std.string (hp), 0.0, 20.0, 300.0, 20.0);
+    updateTextField (scoreTextField, "Score:" + Std.string (totalScore), 0.0, 0.0, 300.0, 20.0);
 
     detectCollision ();
 
@@ -90,8 +91,8 @@ class GameScene extends Scene {
 
   function deleteOutsideBullet () {
     for (bullet in bullets) {
-      if ( bullet.cx < 0.0 || bullet.cx > windowWidth
-           || bullet.cy < 0.0 || bullet.cy > windowHeight ) {
+      if ( bullet.cx < -50.0 || bullet.cx > windowWidth + 50.0
+           || bullet.cy < -50.0 || bullet.cy > windowHeight + 50.0 ) {
         removeBullet (bullet);
       }
     }
@@ -100,8 +101,8 @@ class GameScene extends Scene {
   function deleteOutsideEnemy () {
     for (enemyFormation in enemyFormations) {
       for (enemy in enemyFormation.enemies) {
-        if ( enemy.cx < -50.0 || enemy.cx > windowWidth + 50.0
-             || enemy.cy < -50.0 || enemy.cy > windowHeight + 50.0 ) {
+        if ( enemy.cx < -100.0 || enemy.cx > windowWidth + 100.0
+             || enemy.cy < -100.0 || enemy.cy > windowHeight + 100.0 ) {
           enemyFormation.removeEnemy (enemy);
           if (enemyFormation.enemies.length <= 0)
             removeEnemyFormation (enemyFormation);
@@ -125,6 +126,7 @@ class GameScene extends Scene {
     removeChild (enemyFormation);
   }
 
+  // 当たり判定の処理
   function detectCollision () {
     collisionWithEnemyAndBullet ();
     collisionWithEnemyAndMyShip ();
@@ -176,17 +178,19 @@ class GameScene extends Scene {
   }
 
   // テキストフィールドの更新
-  function updateTextField (textField : TextField, text : String, y : Float) {
+  function updateTextField (textField : TextField, text : String,
+                            x:Float, y:Float, w:Float, h:Float) {
+    textField.x = x;
     textField.y = y;
+    textField.width = w;
     textField.text = text;
     textField.selectable = false;
 
-    var textFormat:TextFormat = new TextFormat ("_sans", 20, 0x333333);
-    textFormat.align = TextFormatAlign.LEFT;
+    var tf = new TextFormat ("_sans", 20, 0x333333);
+    tf.align = TextFormatAlign.LEFT;
     
-    textField.setTextFormat (textFormat);
+    textField.setTextFormat (tf);
     textField.alpha = 30;
-    Actuate.tween (textField, 1, { alpha: 1 } ).delay (0.4);
   }
 
 }

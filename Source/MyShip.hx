@@ -7,6 +7,8 @@ import nme.Lib;
 // 自機クラス
 class MyShip extends Mover {
 
+  static inline var graphicPath = "images/MyShip.png";
+
   static inline var SPEED_PER_SECOND = 180.0;
   public static inline var BULLET_RATE = 10.0;
 
@@ -15,13 +17,13 @@ class MyShip extends Mover {
 
   public function new () {
     
-    setGraphic ("images/MyShip.png");
-    
+    setGraphic (graphicPath);
+
     windowWidth = Common.width; windowHeight = Common.height;
     
     super (windowWidth / 2.0, windowHeight - 100.0, graphic);
-    hp = 100;
-    hitRange = 20.0;
+    hp = 20;
+    hitRange = 10.0;
   }
 
   override public function update () {
@@ -33,6 +35,7 @@ class MyShip extends Mover {
       setX (cx - SPEED_PER_SECOND / Lib.stage.frameRate);
     if (KeyboardInput.pressedRight && cx <= windowWidth)
       setX (cx + SPEED_PER_SECOND / Lib.stage.frameRate);
-    
+   
+    if (hp < 0) hp = 0;
   }
 }

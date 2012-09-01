@@ -22,7 +22,7 @@ class Mover extends Sprite {
   public var active : Bool;
 
   // 画像
-  private var graphic : Sprite;
+  var graphic : Sprite;
 
   // HP
   public var hp : Int;

@@ -6,7 +6,7 @@ import nme.Assets;
 
 class GraphicCache {
 
-  private static var graphicCache = new Hash <BitmapData> ();
+  static var graphicCache = new Hash <BitmapData> ();
   
   public static function loadGraphic (path:String, cache:Bool = true) {
     
