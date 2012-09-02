@@ -21,14 +21,14 @@ class Stage1Scene extends GameScene {
     titleTextField = new TextField ();
     addChild (titleTextField);
     
-    addEnemyFormation (new KiteEnemyFormation (50.0, 0.0, 5.0));
-    addEnemyFormation (new KiteEnemyFormation (200.0, 0.0, 5.0));
-    addEnemyFormation (new KiteEnemyFormation (250.0, 0.0, 8.0));
-    addEnemyFormation (new KiteEnemyFormation (200.0, 0.0, 9.0));
-    addEnemyFormation (new KiteEnemyFormation (150.0, 0.0, 10.0));
-    addEnemyFormation (new KiteEnemyFormation (250.0, 0.0, 11.0));
-    addEnemyFormation (new KiteEnemyFormation (150.0, 0.0, 12.0));
-    addEnemyFormation (new KiteEnemyFormation (350.0, 0.0, 13.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (50.0, 0.0, 5.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (200.0, 0.0, 5.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (250.0, 0.0, 8.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (200.0, 0.0, 9.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (150.0, 0.0, 10.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (250.0, 0.0, 11.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (150.0, 0.0, 12.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (350.0, 0.0, 13.0));
   }
 
   override public function update () :NextScene {
@@ -44,7 +44,7 @@ class Stage1Scene extends GameScene {
       removeChild (titleTextField); titleTextField = null;
     }
 
-    if (frameCount >= stageEndSec * Lib.stage.frameRate && GameScene.myShip.active) {
+    if (frameCount >= stageEndSec * Lib.stage.frameRate && GameObjectManager.myShip.active) {
       var nextStage = new Stage2Scene ();
       return Next (nextStage);
     }
@@ -96,23 +96,23 @@ class Stage2Scene extends GameScene {
     titleTextField = new TextField ();
     addChild (titleTextField);
 
-    addEnemyFormation (new KiteEnemyFormation (130.0, 0.0, 3.0));
-    addEnemyFormation (new KiteEnemyFormation (200.0, 0.0, 3.0));
-    addEnemyFormation (new KiteEnemyFormation (300.0, 0.0, 3.0));
-    addEnemyFormation (new KiteEnemyFormation (150.0, 0.0, 5.0));
-    addEnemyFormation (new KiteEnemyFormation (320.0, 0.0, 5.0));
-    addEnemyFormation (new KiteEnemyFormation (250.0, 0.0, 6.0));
-    addEnemyFormation (new KiteEnemyFormation (200.0, 0.0, 7.0));
-    addEnemyFormation (new KiteEnemyFormation (90.0, 0.0, 7.0));
-    addEnemyFormation (new KiteEnemyFormation (400.0, 0.0, 7.0));
-    addEnemyFormation (new KiteEnemyFormation (150.0, 0.0, 8.0));
-    addEnemyFormation (new KiteEnemyFormation (260.0, 0.0, 9.0));
-    addEnemyFormation (new KiteEnemyFormation (120.0, 0.0, 10.0));
-    addEnemyFormation (new KiteEnemyFormation (130.0, 0.0, 10.0));
-    addEnemyFormation (new KiteEnemyFormation (140.0, 0.0, 10.0));
-    addEnemyFormation (new KiteEnemyFormation (150.0, 0.0, 10.0));
-    addEnemyFormation (new KiteEnemyFormation (200.0, 0.0, 11.0));
-    addEnemyFormation (new KiteEnemyFormation (350.0, 0.0, 12.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (130.0, 0.0, 3.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (200.0, 0.0, 3.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (300.0, 0.0, 3.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (150.0, 0.0, 5.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (320.0, 0.0, 5.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (250.0, 0.0, 6.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (200.0, 0.0, 7.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (90.0, 0.0, 7.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (400.0, 0.0, 7.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (150.0, 0.0, 8.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (260.0, 0.0, 9.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (120.0, 0.0, 10.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (130.0, 0.0, 10.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (140.0, 0.0, 10.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (150.0, 0.0, 10.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (200.0, 0.0, 11.0));
+    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (350.0, 0.0, 12.0));
   }
 
   override public function update () :NextScene {
@@ -127,7 +127,7 @@ class Stage2Scene extends GameScene {
       removeChild (titleTextField); titleTextField = null;
     }
 
-    if (frameCount >= stageEndSec * Lib.stage.frameRate && GameScene.myShip.active) {
+    if (frameCount >= stageEndSec * Lib.stage.frameRate && GameObjectManager.myShip.active) {
       var nextStage = new Stage2Scene ();
       return Next (nextStage);
     }

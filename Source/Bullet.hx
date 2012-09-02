@@ -18,4 +18,11 @@ class Bullet extends Mover {
   override public function update () {
     setY (cy - SPEED_PER_SECOND / Lib.stage.frameRate);
   }
+
+  public function deleteOutsideBullet (scene : GameScene) {
+    if (cx < -50.0 || cx > Common.width + 50.0
+        || cy < -50.0 || cy > Common.height + 50.0 ) {
+      GameObjectManager.removeBullet (scene, this);
+    }
+  }
 }

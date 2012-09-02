@@ -56,6 +56,37 @@ class EnemyFormation extends Enemy {
     frameCount++;
   }
 
+  public function detectCollisionWithBullet (scene : GameScene, bullet:Bullet) {
+    for (enemy in enemies) {
+      if (enemy.isHit (bullet)) {
+        enemy.hp -= bullet.power;
+        GameObjectManager.removeBullet (scene, bullet);
+        if (enemy.hp <= 0) {
+          enemy.active = false;
+          removeEnemy (enemy);
+          GameObjectManager.totalScore += enemy.score;
+        }
+      }
+    }
+    if (enemies.length <= 0) {
+      active = false;
+      GameObjectManager.removeEnemyFormation (scene, this);
+    }
+  }
+
+  public function deleteOutsideEnemy (scene : GameScene) {
+    for (enemy in enemies) {
+      if ( enemy.cx < -100.0 || enemy.cx > Common.width + 100.0
+           || enemy.cy < -100.0 || enemy.cy > Common.height + 100.0 ) {
+        removeEnemy (enemy);
+      }
+    }
+    if (enemies.length <= 0) {
+      GameObjectManager.removeEnemyFormation (scene, this);
+
+    }
+  }
+
   public function addEnemy (enemy : Enemy) {
     enemies.push (enemy);
     addChild (enemy);

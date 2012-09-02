@@ -1,6 +1,4 @@
 import nme.display.Sprite;
-import nme.display.Bitmap;
-import nme.display.BitmapData;
 import nme.Assets;
 import nme.Lib;
 
@@ -37,5 +35,30 @@ class MyShip extends Mover {
       setX (cx + SPEED_PER_SECOND / Lib.stage.frameRate);
    
     if (hp < 0) hp = 0;
+  }
+
+  public function fireBullet (scene : GameScene) {
+    if (KeyboardInput.pressedZ
+        && GameObjectManager.frameCountForBullet >= Lib.stage.frameRate / BULLET_RATE
+        && active) {
+      GameObjectManager.frameCountForBullet = 0.0;
+      var bullet = new Bullet (cx, cy - height / 2.0);
+      
+      GameObjectManager.bullets.push (bullet);
+      scene.addChild (bullet);
+    }
+    if (!KeyboardInput.pressedZ)
+      GameObjectManager.frameCountForBullet = Lib.stage.frameRate / BULLET_RATE;
+    GameObjectManager.frameCountForBullet++;
+  }
+
+  public function detectCollisionWithEnemy (scene : GameScene, enemy : Enemy) {
+    if (isHit (enemy)) {
+      hp -= enemy.power;
+      if (hp <= 0) {
+        active = false;
+        scene.removeChild (this);
+      }
+    }
   }
 }
