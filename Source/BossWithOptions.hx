@@ -10,11 +10,10 @@ class BossBody extends Enemy {
   public function new (initX : Float, initY : Float) {
     setGraphic (graphicPath);
     super (initX, initY, graphic);
-    hitRange = 30.0;
+    hitRange = 95.0;
     hp = 130;
     score = 10000;
 
-    setScale (3.0);
     setX (Common.width / 2.0);
   }
 
