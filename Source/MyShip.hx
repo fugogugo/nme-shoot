@@ -25,6 +25,7 @@ class MyShip extends Mover {
   }
 
   override public function update () {
+    
     if (KeyboardInput.pressedUp && cy >= 0.0)
       setY (cy - SPEED_PER_SECOND / Lib.stage.frameRate);
     if (KeyboardInput.pressedDown && cy <= windowHeight)

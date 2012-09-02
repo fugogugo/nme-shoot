@@ -1,4 +1,5 @@
 import KiteEnemy;
+import BossWithOptions;
 import Scene;
 import nme.Lib;
 import nme.text.TextField;
@@ -128,7 +129,7 @@ class Stage2Scene extends GameScene {
     }
 
     if (frameCount >= stageEndSec * Lib.stage.frameRate && GameObjectManager.myShip.active) {
-      var nextStage = new Stage2Scene ();
+      var nextStage = new Stage3Scene ();
       return Next (nextStage);
     }
     return Remaining;
@@ -156,5 +157,36 @@ class Stage2Scene extends GameScene {
     
     titleTextField.setTextFormat (tf);
     titleTextField.alpha = 30;
+  }
+}
+
+class Stage3Scene extends GameScene {
+
+  var frameCount : Int;
+  var boss : BossWithOptions;
+
+  public function new () {
+    super ();
+    frameCount = 0;
+
+    boss = new BossWithOptions ();
+    GameObjectManager.addEnemyFormation (this, boss);
+  }
+
+  override public function update () :NextScene {
+    super.update ();
+    frameCount++;
+    if (frameCount % (3.0 * Lib.stage.frameRate) == 0
+        && boss.active
+        && GameObjectManager.myShip.active) {
+      GameObjectManager.addEnemyFormation (this, new BossOptionsFormation ());
+    }
+    else if (!boss.active && GameObjectManager.myShip.active) {
+      for (enemyFormation in GameObjectManager.enemyFormations) {
+        GameObjectManager.removeEnemyFormation (this, enemyFormation);
+      }
+    }
+
+    return Remaining;
   }
 }

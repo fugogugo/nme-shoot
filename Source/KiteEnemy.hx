@@ -13,7 +13,7 @@ class KiteEnemy extends Enemy {
   public function new (initX : Float, initY : Float, speedPerSecond : Float) {
     setGraphic (graphicPath);
     super (initX, initY, graphic);
-    hitRange = 10.0;
+    hitRange = 15.0;
     hp = 3;
     score = 10;
     this.speedPerSecond = speedPerSecond;

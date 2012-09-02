@@ -19,7 +19,7 @@ class Enemy extends Mover {
 }
 
 // 複数の敵をまとめて処理するクラス
-class EnemyFormation extends Enemy {
+class EnemyFormation extends Mover {
 
   public var enemies (default, null) : Array<Enemy>;
   var appearanceSec (default, null) : Float;
