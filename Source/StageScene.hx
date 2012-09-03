@@ -160,10 +160,12 @@ class Stage2Scene extends GameScene {
   }
 }
 
+// Boss Stage
 class Stage3Scene extends GameScene {
 
   var frameCount : Int;
   var boss : BossWithOptions;
+  var bossLifeTextField : TextField;
 
   public function new () {
     super ();
@@ -171,11 +173,17 @@ class Stage3Scene extends GameScene {
 
     boss = new BossWithOptions ();
     GameObjectManager.addEnemyFormation (this, boss);
+    bossLifeTextField = new TextField ();
+    addChild (bossLifeTextField);
   }
 
   override public function update () :NextScene {
     super.update ();
     frameCount++;
+    if (boss.active)
+      updateTextField (bossLifeTextField, "Boss : " + Std.string (boss.enemies[0].hp),
+                       400.0, 0.0, 100.0, 20.0);
+
     if (frameCount % (3.0 * Lib.stage.frameRate) == 0
         && boss.active
         && GameObjectManager.myShip.active) {
@@ -185,6 +193,7 @@ class Stage3Scene extends GameScene {
       for (enemyFormation in GameObjectManager.enemyFormations) {
         GameObjectManager.removeEnemyFormation (this, enemyFormation);
       }
+      return Next (new Stage1Scene ());
     }
 
     return Remaining;

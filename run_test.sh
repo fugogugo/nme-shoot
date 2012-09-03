@@ -1,1 +1,1 @@
-haxe debug.hxml && ./Export/cpp/Test-debug
+nme test Test.nmml mac

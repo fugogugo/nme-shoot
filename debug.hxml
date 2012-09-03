@@ -1,7 +1,0 @@
--cp Source
--cp Source/Test
--lib nme
--main Test
--cpp Export/cpp
--cp ./Export/cpp/haxe
--debug
