@@ -5,7 +5,7 @@ import nme.Lib;
 class Bullet extends Mover {
   static inline var SPEED_PER_SECOND = 500.0;
 
-  public function new (x:Float, y:Float) {
+  public function new (x:Float, y:Float, angle:Float) {
     
     setGraphic ("images/Bullet01.png");
     super (x, y, graphic);
@@ -13,10 +13,12 @@ class Bullet extends Mover {
     hp = 0;
     power = 1;
     hitRange = 10.0;
+    setAngle (angle);
   }
 
   override public function update (scene : Scene) {
-    y = y - SPEED_PER_SECOND / Common.frameRate;
+    x += Math.sin (this.angle/ 180 * Math.PI) * SPEED_PER_SECOND * 60 / Common.frameRate / Common.frameRate;
+    y -= Math.cos (this.angle / 180 * Math.PI) * SPEED_PER_SECOND * 60 / Common.frameRate / Common.frameRate;
   }
 
   public function deleteOutsideBullet (scene : Scene) {

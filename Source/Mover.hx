@@ -52,7 +52,7 @@ class Mover extends Sprite {
   }
 
   // 当たり判定 (半径でのみ判定)
-  public function isHit (mover : Mover) : Bool {
+  public function isCollision (mover : Mover) : Bool {
     if (!(active && mover.active)) return false;
     var dx = mover.x - x;
     var dy = mover.y - y;

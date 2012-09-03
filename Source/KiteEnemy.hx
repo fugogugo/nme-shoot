@@ -14,7 +14,7 @@ class KiteEnemy extends Enemy {
     setGraphic (graphicPath);
     super (initX, initY, graphic);
     hitRange = 15.0;
-    hp = 3;
+    hp = 10;
     score = 10;
     this.speedPerSecond = speedPerSecond;
     random = Std.random (2) == 1;

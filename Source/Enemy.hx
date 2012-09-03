@@ -7,6 +7,7 @@ class Enemy extends Mover {
   public var score (default, null) : Int;
 
   public var isCollisionWithBullet : Bool;
+  public var isCollisionWithMyShip : Bool;
 
   function new (initX:Float, initY:Float, graphic:Sprite) {
     
@@ -18,8 +19,11 @@ class Enemy extends Mover {
     visible = false;
     active = false;
     isCollisionWithBullet = true;
+    isCollisionWithMyShip = true;
   }
 }
+
+
 
 // 複数の敵をまとめて処理するクラス
 class EnemyFormation extends Mover {
@@ -61,7 +65,7 @@ class EnemyFormation extends Mover {
 
   public function detectCollisionWithBullet (scene : Scene, bullet:Bullet) {
     for (enemy in enemies) {
-      if (enemy.isHit (bullet) && enemy.isCollisionWithBullet) {
+      if (enemy.isCollisionWithBullet && enemy.isCollision (bullet)) {
         enemy.hp -= bullet.power;
         GameObjectManager.removeBullet (scene, bullet);
         if (enemy.hp <= 0) {
@@ -74,6 +78,18 @@ class EnemyFormation extends Mover {
     if (enemies.length <= 0) {
       active = false;
       GameObjectManager.removeEnemyFormation (scene, this);
+    }
+  }
+
+  public function detectCollisionWithMyShip (scene : Scene) {
+    for (enemy in enemies) {
+      if (enemy.isCollisionWithMyShip && GameObjectManager.myShip.isCollision (enemy)) {
+        GameObjectManager.myShip.hp -= power;
+        if (GameObjectManager.myShip.hp <= 0) {
+          GameObjectManager.myShip.active = false;
+          scene.removeChild (GameObjectManager.myShip);
+        }
+      }
     }
   }
 

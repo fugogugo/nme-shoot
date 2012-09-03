@@ -10,29 +10,24 @@ class MyShip extends Mover {
   static inline var SPEED_PER_SECOND = 180.0;
   public static inline var BULLET_RATE = 10.0;
 
-  var windowWidth : Float;
-  var windowHeight : Float;
-
   public function new () {
     
     setGraphic (graphicPath);
-
-    windowWidth = Common.width; windowHeight = Common.height;
     
-    super (windowWidth / 2.0, windowHeight - 100.0, graphic);
-    hp = 20;
-    hitRange = 10.0;
+    super (Common.width / 2.0, Common.height - 100.0, graphic);
+    hp = 1;
+    hitRange = 5.0;
   }
 
   override public function update (scene : Scene) {
     
     if (KeyboardInput.pressedUp && y >= 0.0)
       y = y - SPEED_PER_SECOND / Common.frameRate;
-    if (KeyboardInput.pressedDown && y <= windowHeight)
+    if (KeyboardInput.pressedDown && y <= Common.height)
       y = y + SPEED_PER_SECOND / Common.frameRate;
     if (KeyboardInput.pressedLeft && x >= 0.0)
       x = x - SPEED_PER_SECOND / Common.frameRate;
-    if (KeyboardInput.pressedRight && x <= windowWidth)
+    if (KeyboardInput.pressedRight && x <= Common.width)
       x = x + SPEED_PER_SECOND / Common.frameRate;
    
     if (hp < 0) hp = 0;
@@ -43,23 +38,26 @@ class MyShip extends Mover {
         && GameObjectManager.frameCountForBullet >= Common.frameRate / BULLET_RATE
         && active) {
       GameObjectManager.frameCountForBullet = 0.0;
-      var bullet = new Bullet (x, y - height / 2.0);
+      var bullet0 = new Bullet (x, y - height / 2.0, 0.0);
+      var bullet1 = new Bullet (x, y - height / 2.0, -22.5);
+      var bullet2 = new Bullet (x, y - height / 2.0, 22.5);
+      var bullet3 = new Bullet (x, y - height / 2.0, -45.0);
+      var bullet4 = new Bullet (x, y - height / 2.0, 45.0);
       
-      GameObjectManager.bullets.push (bullet);
-      scene.addChild (bullet);
+      GameObjectManager.bullets.push (bullet0);
+      GameObjectManager.bullets.push (bullet1);
+      GameObjectManager.bullets.push (bullet2);
+      GameObjectManager.bullets.push (bullet3);
+      GameObjectManager.bullets.push (bullet4);
+      scene.addChild (bullet0);
+      scene.addChild (bullet1);
+      scene.addChild (bullet2);
+      scene.addChild (bullet3);
+      scene.addChild (bullet4);
     }
     if (!KeyboardInput.pressedZ)
       GameObjectManager.frameCountForBullet = Common.frameRate / BULLET_RATE;
     GameObjectManager.frameCountForBullet++;
   }
 
-  public function detectCollisionWithEnemy (scene : Scene, enemy : Enemy) {
-    if (isHit (enemy)) {
-      hp -= enemy.power;
-      if (hp <= 0) {
-        active = false;
-        scene.removeChild (this);
-      }
-    }
-  }
 }

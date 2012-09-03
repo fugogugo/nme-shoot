@@ -65,9 +65,7 @@ class GameObjectManager {
 
     if (myShip.active) {
       for (enemyFormation in enemyFormations) {
-        for (enemy in enemyFormation.enemies) {
-          myShip.detectCollisionWithEnemy (scene, enemy);
-        }
+        enemyFormation.detectCollisionWithMyShip (scene);
       }
     }
   }

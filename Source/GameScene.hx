@@ -12,7 +12,6 @@ import Enemy;
 // ゲームのシーンクラス
 class GameScene extends Scene {
 
-  var myShipHpTextField : TextField;
   var scoreTextField : TextField;
 
   var windowWidth : Float;
@@ -36,10 +35,6 @@ class GameScene extends Scene {
     for (enemyFormation in GameObjectManager.enemyFormations)
       addChild (enemyFormation);
     
-
-    myShipHpTextField = new TextField ();
-    addChild (myShipHpTextField);
-
     scoreTextField = new TextField ();
     addChild (scoreTextField);
 
@@ -54,9 +49,7 @@ class GameScene extends Scene {
     GameObjectManager.deleteOutsideObject (this);
     for (enemyFormation in GameObjectManager.enemyFormations) { enemyFormation.update (this); }
 
-    // 自機のHPとスコアの表示
-    var hp = GameObjectManager.myShip.hp;
-    updateTextField (myShipHpTextField, "HP:" + Std.string (hp), 0.0, 20.0, 300.0, 20.0);
+    // スコアの表示
     updateTextField (scoreTextField,
                      "Score:" + Std.string (GameObjectManager.totalScore), 0.0, 0.0, 300.0, 20.0);
 

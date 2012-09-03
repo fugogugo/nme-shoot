@@ -15,7 +15,7 @@ class Main extends Sprite {
     KeyboardInput.initialize ();
     Common.initialize ();
     
-    currentScene = new Stage1Scene ();
+    currentScene = new Stage3Scene ();
     Lib.current.addChild (currentScene);
   }
 

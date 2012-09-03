@@ -189,11 +189,8 @@ class Stage3Scene extends GameScene {
       updateTextField (bossLifeTextField, "Boss : " + Std.string (boss.enemies[0].hp),
                        400.0, 0.0, 160.0, 20.0);
 
-    else if (!boss.active && GameObjectManager.myShip.active) {
-      GameObjectManager.removeAllEnemyFormation (this);
-
+    else if (!boss.active && GameObjectManager.myShip.active)
       return Next (new Stage1Scene ());
-    }
 
     return Remaining;
   }
