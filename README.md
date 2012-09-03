@@ -35,6 +35,7 @@ http://naokirin.github.com/nme-shoot/
 
 十字キー : 移動  
 zキー    : 弾の発射
+xキー    : コンティニュー
 
 ###License
 Copyright 2012- naokirin  
