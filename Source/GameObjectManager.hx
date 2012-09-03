@@ -13,44 +13,50 @@ class GameObjectManager {
 
   public static var frameCountForBullet : Float = 0;
 
-  public static function fireBullet (scene : GameScene) {
+  public static function fireBullet (scene : Scene) {
     myShip.fireBullet (scene);
   }
 
-  public static function deleteOutsideObject (scene : GameScene) {
+  public static function deleteOutsideObject (scene : Scene) {
     deleteOutsideBullet (scene);
     deleteOutsideEnemy (scene);
   }
 
-  static function deleteOutsideBullet (scene : GameScene) {
+  static function deleteOutsideBullet (scene : Scene) {
     for (bullet in bullets) {
       bullet.deleteOutsideBullet (scene);
     }
   }
 
-  static function deleteOutsideEnemy (scene : GameScene) {
+  static function deleteOutsideEnemy (scene : Scene) {
     for (enemyFormation in enemyFormations) {
       enemyFormation.deleteOutsideEnemy (scene);
     }
   }
 
-  public static function removeBullet (scene : GameScene, bullet : Bullet) {
+  public static function removeBullet (scene : Scene, bullet : Bullet) {
     bullets.remove (bullet);
     scene.removeChild (bullet);
   }
 
-  public static function addEnemyFormation (scene : GameScene, enemyFormation : EnemyFormation) {
+  public static function addEnemyFormation (scene : Scene, enemyFormation : EnemyFormation) {
     enemyFormations.push (enemyFormation);
     scene.addChild (enemyFormation);
   }
 
-  public static function removeEnemyFormation (scene : GameScene, enemyFormation : EnemyFormation) {
+  public static function removeEnemyFormation (scene : Scene, enemyFormation : EnemyFormation) {
     enemyFormations.remove (enemyFormation);
     scene.removeChild (enemyFormation);
   }
 
+  public static function removeAllEnemyFormation (scene : Scene) {
+    for (enemyFormation in enemyFormations)
+      scene.removeChild (enemyFormation);
+    enemyFormations = new Array<EnemyFormation> ();
+  }
+
   // 当たり判定の処理
-  public static function detectCollision (scene : GameScene) {
+  public static function detectCollision (scene : Scene) {
     for (bullet in bullets) {
       for (enemyFormation in enemyFormations) {
         enemyFormation.detectCollisionWithBullet (scene, bullet);

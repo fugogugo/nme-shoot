@@ -24,36 +24,36 @@ class MyShip extends Mover {
     hitRange = 10.0;
   }
 
-  override public function update () {
+  override public function update (scene : Scene) {
     
-    if (KeyboardInput.pressedUp && cy >= 0.0)
-      setY (cy - SPEED_PER_SECOND / Lib.stage.frameRate);
-    if (KeyboardInput.pressedDown && cy <= windowHeight)
-      setY (cy + SPEED_PER_SECOND / Lib.stage.frameRate);
-    if (KeyboardInput.pressedLeft && cx >= 0.0)
-      setX (cx - SPEED_PER_SECOND / Lib.stage.frameRate);
-    if (KeyboardInput.pressedRight && cx <= windowWidth)
-      setX (cx + SPEED_PER_SECOND / Lib.stage.frameRate);
+    if (KeyboardInput.pressedUp && y >= 0.0)
+      y = y - SPEED_PER_SECOND / Common.frameRate;
+    if (KeyboardInput.pressedDown && y <= windowHeight)
+      y = y + SPEED_PER_SECOND / Common.frameRate;
+    if (KeyboardInput.pressedLeft && x >= 0.0)
+      x = x - SPEED_PER_SECOND / Common.frameRate;
+    if (KeyboardInput.pressedRight && x <= windowWidth)
+      x = x + SPEED_PER_SECOND / Common.frameRate;
    
     if (hp < 0) hp = 0;
   }
 
-  public function fireBullet (scene : GameScene) {
+  public function fireBullet (scene : Scene) {
     if (KeyboardInput.pressedZ
-        && GameObjectManager.frameCountForBullet >= Lib.stage.frameRate / BULLET_RATE
+        && GameObjectManager.frameCountForBullet >= Common.frameRate / BULLET_RATE
         && active) {
       GameObjectManager.frameCountForBullet = 0.0;
-      var bullet = new Bullet (cx, cy - height / 2.0);
+      var bullet = new Bullet (x, y - height / 2.0);
       
       GameObjectManager.bullets.push (bullet);
       scene.addChild (bullet);
     }
     if (!KeyboardInput.pressedZ)
-      GameObjectManager.frameCountForBullet = Lib.stage.frameRate / BULLET_RATE;
+      GameObjectManager.frameCountForBullet = Common.frameRate / BULLET_RATE;
     GameObjectManager.frameCountForBullet++;
   }
 
-  public function detectCollisionWithEnemy (scene : GameScene, enemy : Enemy) {
+  public function detectCollisionWithEnemy (scene : Scene, enemy : Enemy) {
     if (isHit (enemy)) {
       hp -= enemy.power;
       if (hp <= 0) {

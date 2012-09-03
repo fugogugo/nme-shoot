@@ -13,6 +13,7 @@ class Main extends Sprite {
     super ();
     addEventListener ( Event.ENTER_FRAME, this_onEnterFrame );
     KeyboardInput.initialize ();
+    Common.initialize ();
     
     currentScene = new Stage1Scene ();
     Lib.current.addChild (currentScene);

@@ -24,7 +24,7 @@ class GameScene extends Scene {
   }
 
   public function initialize () {
-    GameObjectManager.frameCountForBullet = Lib.stage.frameRate / MyShip.BULLET_RATE;
+    GameObjectManager.frameCountForBullet = Common.frameRate / MyShip.BULLET_RATE;
 
     if (GameObjectManager.myShip == null) {
       GameObjectManager.myShip = new MyShip ();
@@ -48,11 +48,11 @@ class GameScene extends Scene {
 
   override public function update () : NextScene {
 
-    GameObjectManager.myShip.update ();
+    GameObjectManager.myShip.update (this);
     GameObjectManager.fireBullet (this);
-    for (bullet in GameObjectManager.bullets) { bullet.update (); }
+    for (bullet in GameObjectManager.bullets) { bullet.update (this); }
     GameObjectManager.deleteOutsideObject (this);
-    for (enemyFormation in GameObjectManager.enemyFormations) { enemyFormation.update (); }
+    for (enemyFormation in GameObjectManager.enemyFormations) { enemyFormation.update (this); }
 
     // 自機のHPとスコアの表示
     var hp = GameObjectManager.myShip.hp;

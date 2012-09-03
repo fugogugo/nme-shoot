@@ -14,11 +14,11 @@ class Stage1Scene extends GameScene {
 
   var titleTextField : TextField;
 
+
   public function new () {
     super ();
 
     frameCount = 0;
-
     titleTextField = new TextField ();
     addChild (titleTextField);
     
@@ -32,6 +32,7 @@ class Stage1Scene extends GameScene {
     GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (350.0, 0.0, 13.0));
   }
 
+
   override public function update () :NextScene {
     super.update ();
 
@@ -41,16 +42,17 @@ class Stage1Scene extends GameScene {
       updateTitleTextField ("Game Start!", Common.width / 4.0, Common.width / 2.0);
     }
 
-    if (frameCount >= Lib.stage.frameRate * 3 && titleTextField != null) {
+    if (frameCount >= Common.frameRate * 3 && titleTextField != null) {
       removeChild (titleTextField); titleTextField = null;
     }
 
-    if (frameCount >= stageEndSec * Lib.stage.frameRate && GameObjectManager.myShip.active) {
+    if (frameCount >= stageEndSec * Common.frameRate && GameObjectManager.myShip.active) {
       var nextStage = new Stage2Scene ();
       return Next (nextStage);
     }
     return Remaining;
   }
+
 
   function updateTitleTextField (title:String, x:Float, y:Float) {
     titleTextField.x = x;
@@ -124,11 +126,11 @@ class Stage2Scene extends GameScene {
       updateTitleTextField ("Next Stage Start!", 150.0, 300.0);
     }
 
-    if (frameCount >= Lib.stage.frameRate * 3 && titleTextField != null) {
+    if (frameCount >= Common.frameRate * 3 && titleTextField != null) {
       removeChild (titleTextField); titleTextField = null;
     }
 
-    if (frameCount >= stageEndSec * Lib.stage.frameRate && GameObjectManager.myShip.active) {
+    if (frameCount >= stageEndSec * Common.frameRate && GameObjectManager.myShip.active) {
       var nextStage = new Stage3Scene ();
       return Next (nextStage);
     }
@@ -160,12 +162,14 @@ class Stage2Scene extends GameScene {
   }
 }
 
+
 // Boss Stage
 class Stage3Scene extends GameScene {
 
   var frameCount : Int;
   var boss : BossWithOptions;
   var bossLifeTextField : TextField;
+
 
   public function new () {
     super ();
@@ -177,6 +181,7 @@ class Stage3Scene extends GameScene {
     addChild (bossLifeTextField);
   }
 
+
   override public function update () :NextScene {
     super.update ();
     frameCount++;
@@ -184,15 +189,9 @@ class Stage3Scene extends GameScene {
       updateTextField (bossLifeTextField, "Boss : " + Std.string (boss.enemies[0].hp),
                        400.0, 0.0, 100.0, 20.0);
 
-    if (frameCount % (3.0 * Lib.stage.frameRate) == 0
-        && boss.active
-        && GameObjectManager.myShip.active) {
-      GameObjectManager.addEnemyFormation (this, new BossOptionsFormation ());
-    }
     else if (!boss.active && GameObjectManager.myShip.active) {
-      for (enemyFormation in GameObjectManager.enemyFormations) {
-        GameObjectManager.removeEnemyFormation (this, enemyFormation);
-      }
+      GameObjectManager.removeAllEnemyFormation (this);
+
       return Next (new Stage1Scene ());
     }
 

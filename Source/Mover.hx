@@ -5,10 +5,6 @@ import nme.Assets;
 // ゲームオブジェクトのクラス
 class Mover extends Sprite {
 
-  // 中心座標
-  public var cx (default, setX) : Float;
-  public var cy (default, setY) : Float;
-
   // 当たり判定の範囲
   public var hitRange (default, null) : Float;
 
@@ -22,13 +18,14 @@ class Mover extends Sprite {
   public var active : Bool;
 
   // 画像
-  var graphic : Sprite;
+  public var graphic : Sprite;
 
   // HP
   public var hp : Int;
 
   // 攻撃力
   public var power (default, null) : Int;
+
 
 
   public function new (x:Float = 0.0, y:Float = 0.0, image:Sprite) {
@@ -43,38 +40,31 @@ class Mover extends Sprite {
     power = 1;
 
     setScale (1.0);
-    setX (x); setY (y);
+    this.x = x; this.y = y;
+
+    graphic.x = - graphic.width / 2.0;
+    graphic.y = - graphic.height / 2.0;
   }
 
   // フレームごとの処理 (サブクラスでオーバーライドする)
-  public function update () : Void {
+  public function update (scene : Scene) : Void {
     
   }
 
   // 当たり判定 (半径でのみ判定)
   public function isHit (mover : Mover) : Bool {
     if (!(active && mover.active)) return false;
-    var dx = mover.cx - cx;
-    var dy = mover.cy - cy;
+    var dx = mover.x - x;
+    var dy = mover.y - y;
     var hit = mover.hitRange * mover.scale + hitRange * scale;
 
     return dx*dx + dy*dy < hit*hit;
   }
 
-  public function setX (x : Float) {
-    this.x = x;
-    graphic.x = - graphic.width / 2.0;
-    return cx = x;
-  }
-
-  public function setY (y : Float) {
-    this.y = y;
-    graphic.y = - graphic.height / 2.0;
-    return cy = y;
-  }
-
   function setGraphic (path:String) {
     graphic = GraphicCache.loadGraphic (path);
+    graphic.x = - graphic.width / 2.0;
+    graphic.y = - graphic.height / 2.0;
   }
 
   public function setScale (scale : Float) {

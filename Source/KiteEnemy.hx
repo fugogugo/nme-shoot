@@ -20,12 +20,12 @@ class KiteEnemy extends Enemy {
     random = Std.random (2) == 1;
   }
 
-  override public function update () {
+  override public function update (scene : Scene) {
     if (random)
-      setX (cx + Math.cos (cy/speedPerSecond) * 2.0);
+      x = x + Math.cos (y/speedPerSecond) * 2.0;
     else
-      setX (cx - Math.cos (cy/speedPerSecond) * 2.0);
-    setY (cy + speedPerSecond / Lib.stage.frameRate);
+      x = x - Math.cos (y/speedPerSecond) * 2.0;
+    y = y + speedPerSecond / Common.frameRate;
   }
 }
 

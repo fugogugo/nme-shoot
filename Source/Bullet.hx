@@ -15,13 +15,13 @@ class Bullet extends Mover {
     hitRange = 10.0;
   }
 
-  override public function update () {
-    setY (cy - SPEED_PER_SECOND / Lib.stage.frameRate);
+  override public function update (scene : Scene) {
+    y = y - SPEED_PER_SECOND / Common.frameRate;
   }
 
-  public function deleteOutsideBullet (scene : GameScene) {
-    if (cx < -50.0 || cx > Common.width + 50.0
-        || cy < -50.0 || cy > Common.height + 50.0 ) {
+  public function deleteOutsideBullet (scene : Scene) {
+    if (x < -50.0 || x > Common.width + 50.0
+        || y < -50.0 || y > Common.height + 50.0 ) {
       GameObjectManager.removeBullet (scene, this);
     }
   }

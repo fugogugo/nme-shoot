@@ -6,6 +6,8 @@ class Enemy extends Mover {
 
   public var score (default, null) : Int;
 
+  public var isCollisionWithBullet : Bool;
+
   function new (initX:Float, initY:Float, graphic:Sprite) {
     
     score = 0;
@@ -15,6 +17,7 @@ class Enemy extends Mover {
     super (initX, initY, graphic);
     visible = false;
     active = false;
+    isCollisionWithBullet = true;
   }
 }
 
@@ -35,14 +38,14 @@ class EnemyFormation extends Mover {
     visible = false;
   }
 
-  override public function update () {
+  override public function update (scene : Scene) {
 
-    if (appearanceSec <= frameCount / Lib.stage.frameRate) {
+    if (appearanceSec <= frameCount / Common.frameRate) {
 
       for (enemy in enemies) {
         enemy.visible = true;
         enemy.active = true;
-        enemy.update ();
+        enemy.update (scene);
         if (!enemy.active) removeEnemy (enemy);
       }
       active = true;
@@ -56,9 +59,9 @@ class EnemyFormation extends Mover {
     frameCount++;
   }
 
-  public function detectCollisionWithBullet (scene : GameScene, bullet:Bullet) {
+  public function detectCollisionWithBullet (scene : Scene, bullet:Bullet) {
     for (enemy in enemies) {
-      if (enemy.isHit (bullet)) {
+      if (enemy.isHit (bullet) && enemy.isCollisionWithBullet) {
         enemy.hp -= bullet.power;
         GameObjectManager.removeBullet (scene, bullet);
         if (enemy.hp <= 0) {
@@ -74,10 +77,10 @@ class EnemyFormation extends Mover {
     }
   }
 
-  public function deleteOutsideEnemy (scene : GameScene) {
+  public function deleteOutsideEnemy (scene : Scene) {
     for (enemy in enemies) {
-      if ( enemy.cx < -100.0 || enemy.cx > Common.width + 100.0
-           || enemy.cy < -100.0 || enemy.cy > Common.height + 100.0 ) {
+      if ( enemy.x < -100.0 || enemy.x > Common.width + 100.0
+           || enemy.y < -100.0 || enemy.y > Common.height + 100.0 ) {
         removeEnemy (enemy);
       }
     }

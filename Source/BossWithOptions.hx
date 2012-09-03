@@ -11,17 +11,18 @@ class BossBody extends Enemy {
     setGraphic (graphicPath);
     super (initX, initY, graphic);
     hitRange = 95.0;
-    hp = 130;
+    hp = 1000;
     score = 10000;
 
-    setX (Common.width / 2.0);
+    x = Common.width / 2.0;
   }
 
-  override public function update () {
-    if (frameCount / Lib.stage.frameRate <= 6.0)
-      setY (cy + 20.0 / Lib.stage.frameRate);
-    else if (frameCount / Lib.stage.frameRate >= 8.0)
-      setX (Math.sin (frameCount / Lib.stage.frameRate / 2.0 - 8.0 /2.0) * 100.0 + Common.width / 2.0);
+  override public function update (scene : Scene) {
+    var slideStartSec = 8.0;
+    if (frameCount / Common.frameRate <= 6.0)
+      y = y + 20.0 / Common.frameRate;
+    else if (frameCount / Common.frameRate >= slideStartSec)
+      x = Math.sin (frameCount / Common.frameRate - slideStartSec)/2.0 * 100.0 + Common.width / 2.0;
 
     frameCount++;
 
@@ -29,7 +30,8 @@ class BossBody extends Enemy {
 }
 
 class BossOption extends Enemy {
-  static inline var maxAngleRate : Float = 50.0;
+  static inline var maxAngleRate : Float = 40.0;
+  static inline var speed = 4.0;
   
   static inline var graphicPath = "images/BossOption.png";
 
@@ -39,52 +41,76 @@ class BossOption extends Enemy {
     setGraphic (graphicPath);
     super (initX, initY, graphic);
     hitRange = 10.0;
+    isCollisionWithBullet = false;
     hp = 5;
     score = 10;
     setAngle (initAngle);
   }
 
-  override public function update () {
-    var angle = - Math.atan2 (GameObjectManager.myShip.cx - cx, GameObjectManager.myShip.cy - cy) * 180 / Math.PI;
+  override public function update (scene : Scene) {
+    var angle = - Math.atan2 (GameObjectManager.myShip.x - x, GameObjectManager.myShip.y - y) * 180 / Math.PI;
 
-    if (angle - this.angle < -maxAngleRate / Lib.stage.frameRate)
-      angle = this.angle - maxAngleRate / Lib.stage.frameRate;
-    else if (angle - this.angle > maxAngleRate / Lib.stage.frameRate)
-      angle = this.angle + maxAngleRate / Lib.stage.frameRate;
+    if (angle - this.angle < -maxAngleRate / Common.frameRate)
+      angle = this.angle - maxAngleRate / Common.frameRate;
+    else if (angle - this.angle > maxAngleRate / Common.frameRate)
+      angle = this.angle + maxAngleRate / Common.frameRate;
 
     setAngle (angle);
-    setX (cx - Math.sin (this.angle/ 180 * Math.PI) * 2.0 * 60 / Lib.stage.frameRate);
-    setY (cy + Math.cos (this.angle / 180 * Math.PI) * 2.0 * 60 / Lib.stage.frameRate);
+    x = x - Math.sin (this.angle/ 180 * Math.PI) * speed * 60 / Common.frameRate;
+    y = y + Math.cos (this.angle / 180 * Math.PI) * speed * 60 / Common.frameRate;
   }
 }
 
 class BossOptionsFormation extends EnemyFormation {
 
-  public function new () {
+  public function new (initX:Float, initY:Float) {
     super ();
-    addEnemy (new BossOption (0.0, -10.0, 50.0));
-    addEnemy (new BossOption (100.0, -10.0, 30.0));
-    addEnemy (new BossOption (200.0, -10.0, 15.0));
-    addEnemy (new BossOption (300.0, -10.0, 0.0));
-    addEnemy (new BossOption (400.0, -10.0, -15.0));
-    addEnemy (new BossOption (500.0, -10.0, -30.0));
-    addEnemy (new BossOption (600.0, -10.0, -50.0));
-
-    addEnemy (new BossOption (50.0, -30.0, 40.0));
-    addEnemy (new BossOption (150.0, -30.0, 10.0));
-    addEnemy (new BossOption (250.0, -30.0, 5.0));
-    addEnemy (new BossOption (350.0, -30.0, -5.0));
-    addEnemy (new BossOption (450.0, -30.0, -10.0));
-    addEnemy (new BossOption (550.0, -30.0, -40.0));
+    addEnemy (new BossOption (initX-50.0, initY-10.0, 50.0));
+    addEnemy (new BossOption (initX-40.0, initY-10.0, 30.0));
+    addEnemy (new BossOption (initX-20.0, initY-10.0, 15.0));
+    addEnemy (new BossOption (initX, initY-10.0, 0.0));
+    addEnemy (new BossOption (initX+20.0, initY-10.0, -15.0));
+    addEnemy (new BossOption (initX+40.0, initY-10.0, -30.0));
+    addEnemy (new BossOption (initX+50.0, initY-10.0, -50.0));
+    
+    addEnemy (new BossOption (initX-50.0, initY-50.0, 70.0));
+    addEnemy (new BossOption (initX-50.0, initY-40.0, 60.0));
+    addEnemy (new BossOption (initX-50.0, initY-30.0, 55.0));
+    addEnemy (new BossOption (initX+50.0, initY-30.0, -55.0));
+    addEnemy (new BossOption (initX+50.0, initY-40.0, -60.0));
+    addEnemy (new BossOption (initX+50.0, initY-50.0, -70.0));
+    
   }
 }
 
+
 class BossWithOptions extends EnemyFormation {
+
+  var bossBody : BossBody;
 
   public function new () {
     super ();
-    addEnemy (new BossBody (0.0, 0.0));
+    bossBody = new BossBody (0.0, 0.0);
+    addEnemy (bossBody);
 
     frameCount = 0;
+  }
+
+  override public function update (scene : Scene) {
+    super.update (scene);
+    if (bossBody.active && GameObjectManager.myShip.active) {
+      if (frameCount % (2.0 * Common.frameRate) == 0)
+        GameObjectManager.addEnemyFormation (scene, new BossOptionsFormation (bossBody.x, bossBody.y + bossBody.graphic.height/2.0));
+      if (frameCount % (5.0 * Common.frameRate) == 0)
+        GameObjectManager.addEnemyFormation (scene, new BossOptionsFormation (bossBody.x, bossBody.y + bossBody.graphic.height/2.0 - 40.0));
+
+      if (frameCount % (9.0 * Common.frameRate) == 0)
+        GameObjectManager.addEnemyFormation (scene, new BossOptionsFormation (bossBody.x, bossBody.y + bossBody.graphic.height/2.0 - 30.0));
+
+      if (frameCount % (18.0 * Common.frameRate) == 0)
+        GameObjectManager.addEnemyFormation (scene, new BossOptionsFormation (bossBody.x, bossBody.y + bossBody.graphic.height/2.0 - 50.0));
+
+    }
+
   }
 }
