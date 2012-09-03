@@ -22,6 +22,7 @@ class GameScene extends Scene {
     initialize ();
   }
 
+  // 初期化
   public function initialize () {
     GameObjectManager.frameCountForBullet = Common.frameRate / MyShip.BULLET_RATE;
 
@@ -74,4 +75,17 @@ class GameScene extends Scene {
     textField.alpha = 30;
   }
 
+
+  // コンティニュー
+  function gameContinue (sceneClass : Class<Dynamic>) {
+    if (!GameObjectManager.myShip.active && KeyboardInput.pressedX) {
+      GameObjectManager.myShip = new MyShip ();
+      GameObjectManager.removeAllBullets (this);
+      GameObjectManager.removeAllEnemyFormations (this);
+      // スコアを半分にする
+      GameObjectManager.totalScore = Std.int (GameObjectManager.totalScore / 2.0);
+      return Next (Type.createInstance (sceneClass, []));
+    }
+    return Remaining;
+  }
 }

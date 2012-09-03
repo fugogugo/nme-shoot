@@ -39,6 +39,12 @@ class GameObjectManager {
     scene.removeChild (bullet);
   }
 
+  public static function removeAllBullets (scene : Scene) {
+    for (bullet in bullets)
+      scene.removeChild (bullet);
+    bullets = new Array<Bullet> ();
+  }
+
   public static function addEnemyFormation (scene : Scene, enemyFormation : EnemyFormation) {
     enemyFormations.push (enemyFormation);
     scene.addChild (enemyFormation);
@@ -49,7 +55,7 @@ class GameObjectManager {
     scene.removeChild (enemyFormation);
   }
 
-  public static function removeAllEnemyFormation (scene : Scene) {
+  public static function removeAllEnemyFormations (scene : Scene) {
     for (enemyFormation in enemyFormations)
       scene.removeChild (enemyFormation);
     enemyFormations = new Array<EnemyFormation> ();

@@ -5,7 +5,7 @@ class BossBody extends Enemy {
 
   static inline var graphicPath = "images/BossBody.png";
 
-  static var frameCount = 0;
+  var frameCount : Int;
 
   public function new (initX : Float, initY : Float) {
     setGraphic (graphicPath);
@@ -13,6 +13,7 @@ class BossBody extends Enemy {
     hitRange = 95.0;
     hp = 2000;
     score = 10000;
+    frameCount = 0;
 
     x = Common.width / 2.0;
   }
@@ -22,7 +23,7 @@ class BossBody extends Enemy {
     if (frameCount / Common.frameRate <= 6.0)
       y = y + 20.0 / Common.frameRate;
     else if (frameCount / Common.frameRate >= slideStartSec)
-      x = Math.sin (frameCount / Common.frameRate - slideStartSec)/2.0 * 100.0 + Common.width / 2.0;
+      x = Math.sin (frameCount / Common.frameRate - slideStartSec) * 100.0 + Common.width / 2.0;
 
     frameCount++;
 
@@ -35,7 +36,7 @@ class BossOption extends Enemy {
   
   static inline var graphicPath = "images/BossOption.png";
 
-  static var frameCount = 0;
+  var frameCount : Int;
 
   public function new (initX : Float, initY : Float, initAngle : Float) {
     setGraphic (graphicPath);
@@ -44,6 +45,7 @@ class BossOption extends Enemy {
     isCollisionWithBullet = false;
     hp = 5;
     score = 10;
+    frameCount = 0;
     setAngle (initAngle);
   }
 
@@ -56,8 +58,8 @@ class BossOption extends Enemy {
       angle = this.angle + maxAngleRate / Common.frameRate;
 
     setAngle (angle);
-    x = x - Math.sin (this.angle/ 180 * Math.PI) * SPEED_PER_SECOND * 60 / Common.frameRate / Common.frameRate;
-    y = y + Math.cos (this.angle / 180 * Math.PI) * SPEED_PER_SECOND * 60 / Common.frameRate / Common.frameRate;
+    x = x - Math.sin (this.angle/ 180 * Math.PI) * SPEED_PER_SECOND / Common.frameRate;
+    y = y + Math.cos (this.angle / 180 * Math.PI) * SPEED_PER_SECOND / Common.frameRate;
   }
 }
 
@@ -73,15 +75,15 @@ class SpiralBullet extends Enemy {
   public function new (initX : Float, initY : Float, directionAngle : Float) {
     setGraphic (graphicPath);
     super (initX, initY, graphic);
-    hitRange = 20.0;
+    hitRange = 15.0;
     isCollisionWithBullet = false;
     this.directionAngle = directionAngle;
   }
 
   override public function update (scene : Scene) {
 
-    x = x - Math.sin (this.directionAngle/ 180 * Math.PI) * SPEED_PER_SECOND * 60 / Common.frameRate / Common.frameRate;
-    y = y + Math.cos (this.directionAngle / 180 * Math.PI) * SPEED_PER_SECOND * 60 / Common.frameRate / Common.frameRate;
+    x = x - Math.sin (this.directionAngle/ 180 * Math.PI) * SPEED_PER_SECOND / Common.frameRate;
+    y = y + Math.cos (this.directionAngle / 180 * Math.PI) * SPEED_PER_SECOND / Common.frameRate;
   }
 }
 
@@ -154,11 +156,11 @@ class BossWithOptions extends EnemyFormation {
     }
 
     if (bossBody.hp <= 1000 && !weaponChange) {
-      GameObjectManager.removeAllEnemyFormation (scene);
+      GameObjectManager.removeAllEnemyFormations (scene);
       GameObjectManager.addEnemyFormation (scene, this);
       weaponChange = true;
     }
     if (!bossBody.active && GameObjectManager.myShip.active)
-      GameObjectManager.removeAllEnemyFormation (scene);
+      GameObjectManager.removeAllEnemyFormations (scene);
   }
 }

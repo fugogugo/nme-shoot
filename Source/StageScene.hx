@@ -39,7 +39,7 @@ class Stage1Scene extends GameScene {
     frameCount++;
 
     if (titleTextField != null) {
-      updateTitleTextField ("Game Start!", Common.width / 4.0, Common.width / 2.0);
+      updateTitleTextField ("New Game Start!", Common.width / 4.0, Common.width / 2.0);
     }
 
     if (frameCount >= Common.frameRate * 3 && titleTextField != null) {
@@ -50,7 +50,7 @@ class Stage1Scene extends GameScene {
       var nextStage = new Stage2Scene ();
       return Next (nextStage);
     }
-    return Remaining;
+    return gameContinue(Stage1Scene);
   }
 
 
@@ -134,7 +134,7 @@ class Stage2Scene extends GameScene {
       var nextStage = new Stage3Scene ();
       return Next (nextStage);
     }
-    return Remaining;
+    return gameContinue(Stage1Scene);
   }
 
   function updateTitleTextField (title:String, x:Float, y:Float) {
@@ -170,7 +170,6 @@ class Stage3Scene extends GameScene {
   var boss : BossWithOptions;
   var bossLifeTextField : TextField;
 
-
   public function new () {
     super ();
     frameCount = 0;
@@ -192,6 +191,6 @@ class Stage3Scene extends GameScene {
     else if (!boss.active && GameObjectManager.myShip.active)
       return Next (new Stage1Scene ());
 
-    return Remaining;
+    return gameContinue(Stage3Scene);
   }
 }

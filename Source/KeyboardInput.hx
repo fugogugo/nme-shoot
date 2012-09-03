@@ -9,6 +9,7 @@ class KeyboardInput {
   public static var pressedRight : Bool = false;
 
   public static var pressedZ : Bool = false;
+  public static var pressedX : Bool = false;
 
   // キーイベントの登録
   public static function initialize () {
@@ -23,6 +24,8 @@ class KeyboardInput {
 
     KeyBinding.addOnPress ("z", keyboard_onPressZ);
     KeyBinding.addOnRelease ("z", keyboard_onReleaseZ);
+    KeyBinding.addOnPress ("x", keyboard_onPressX);
+    KeyBinding.addOnRelease ("x", keyboard_onReleaseX);
   }
 
   static function keyboard_onPressUp () : Void { pressedUp = true; }
@@ -36,4 +39,6 @@ class KeyboardInput {
 
   static function keyboard_onPressZ () : Void { pressedZ = true; }
   static function keyboard_onReleaseZ () : Void { pressedZ = false; }
+  static function keyboard_onPressX () : Void { pressedX = true; }
+  static function keyboard_onReleaseX () : Void { pressedX = false; }
 }

@@ -17,8 +17,8 @@ class Bullet extends Mover {
   }
 
   override public function update (scene : Scene) {
-    x += Math.sin (this.angle/ 180 * Math.PI) * SPEED_PER_SECOND * 60 / Common.frameRate / Common.frameRate;
-    y -= Math.cos (this.angle / 180 * Math.PI) * SPEED_PER_SECOND * 60 / Common.frameRate / Common.frameRate;
+    x += Math.sin (this.angle/ 180 * Math.PI) * SPEED_PER_SECOND/ Common.frameRate;
+    y -= Math.cos (this.angle / 180 * Math.PI) * SPEED_PER_SECOND / Common.frameRate;
   }
 
   public function deleteOutsideBullet (scene : Scene) {
