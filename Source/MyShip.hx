@@ -22,13 +22,13 @@ class MyShip extends Mover {
   override public function update (scene : Scene) {
     
     if (KeyboardInput.pressedUp && y >= 0.0)
-      y = y - SPEED_PER_SECOND / Common.frameRate;
+      y -= Common.perFrameRate (SPEED_PER_SECOND);
     if (KeyboardInput.pressedDown && y <= Common.height)
-      y = y + SPEED_PER_SECOND / Common.frameRate;
+      y += Common.perFrameRate (SPEED_PER_SECOND);
     if (KeyboardInput.pressedLeft && x >= 0.0)
-      x = x - SPEED_PER_SECOND / Common.frameRate;
+      x -= Common.perFrameRate (SPEED_PER_SECOND);
     if (KeyboardInput.pressedRight && x <= Common.width)
-      x = x + SPEED_PER_SECOND / Common.frameRate;
+      x += Common.perFrameRate (SPEED_PER_SECOND);
    
     if (hp < 0) hp = 0;
   }

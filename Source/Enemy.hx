@@ -44,7 +44,7 @@ class EnemyFormation extends Mover {
 
   override public function update (scene : Scene) {
 
-    if (appearanceSec <= frameCount / Common.frameRate) {
+    if (appearanceSec <= Common.perFrameRate (frameCount)) {
 
       for (enemy in enemies) {
         enemy.visible = true;

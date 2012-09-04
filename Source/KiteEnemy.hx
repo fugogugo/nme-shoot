@@ -22,10 +22,10 @@ class KiteEnemy extends Enemy {
 
   override public function update (scene : Scene) {
     if (random)
-      x = x + Math.cos (y/speedPerSecond) * 2.0 * 60.0 / Common.frameRate;
+      x += Math.cos (y/speedPerSecond) * Common.perFrameRate (120.0);
     else
-      x = x - Math.cos (y/speedPerSecond) * 2.0 * 60.0 / Common.frameRate;
-    y = y + speedPerSecond / Common.frameRate;
+      x -= Math.cos (y/speedPerSecond) * Common.perFrameRate (120.0);
+    y += Common.perFrameRate (speedPerSecond);
   }
 }
 

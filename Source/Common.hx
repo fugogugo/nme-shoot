@@ -16,4 +16,17 @@ class Common {
     Common.slow = slow;
     return slow;
   }
+
+
+  public static function radToDeg (rad : Float) {
+    return rad / Math.PI * 180;
+  }
+
+  public static function degToRad (deg : Float) {
+    return deg / 180 * Math.PI;
+  }
+
+  public static function perFrameRate (num : Float) {
+    return num / frameRate;
+  }
 }

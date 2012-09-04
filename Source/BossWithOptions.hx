@@ -4,6 +4,10 @@ import nme.Lib;
 class BossBody extends Enemy {
 
   static inline var graphicPath = "images/BossBody.png";
+  static inline var movingWidth = 100.0;
+  static inline var movingHeight = 120.0;
+  static inline var slideStartSec = 8.0;
+  static inline var movingYSec = 6.0;
 
   var frameCount : Int;
 
@@ -11,7 +15,7 @@ class BossBody extends Enemy {
     setGraphic (graphicPath);
     super (initX, initY, graphic);
     hitRange = 95.0;
-    hp = 2000;
+    hp = 1000;
     score = 10000;
     frameCount = 0;
 
@@ -19,11 +23,11 @@ class BossBody extends Enemy {
   }
 
   override public function update (scene : Scene) {
-    var slideStartSec = 8.0;
-    if (frameCount / Common.frameRate <= 6.0)
-      y = y + 20.0 / Common.frameRate;
-    else if (frameCount / Common.frameRate >= slideStartSec)
-      x = Math.sin (frameCount / Common.frameRate - slideStartSec) * 100.0 + Common.width / 2.0;
+    if (Common.perFrameRate (frameCount) <= movingYSec)
+      y += Common.perFrameRate (movingHeight / movingYSec);
+    else if (Common.perFrameRate (frameCount) >= slideStartSec)
+      x = Math.sin (Common.perFrameRate (frameCount) - slideStartSec)
+        * movingWidth + Common.width / 2.0;
 
     frameCount++;
 
@@ -42,24 +46,24 @@ class BossOption extends Enemy {
     setGraphic (graphicPath);
     super (initX, initY, graphic);
     hitRange = 15.0;
-    isCollisionWithBullet = false;
     hp = 5;
     score = 10;
     frameCount = 0;
+    isCollisionWithBullet = false;
     setAngle (initAngle);
   }
 
   override public function update (scene : Scene) {
-    var angle = - Math.atan2 (GameObjectManager.myShip.x - x, GameObjectManager.myShip.y - y) * 180 / Math.PI;
+    var angle = -Common.radToDeg (Math.atan2 (GameObjectManager.myShip.x - x, GameObjectManager.myShip.y - y));
 
-    if (angle - this.angle < -maxAngleRate / Common.frameRate)
-      angle = this.angle - maxAngleRate / Common.frameRate;
-    else if (angle - this.angle > maxAngleRate / Common.frameRate)
-      angle = this.angle + maxAngleRate / Common.frameRate;
+    if (angle - this.angle < Common.perFrameRate (-maxAngleRate))
+      angle = this.angle - Common.perFrameRate (maxAngleRate);
+    else if (angle - this.angle > Common.perFrameRate (maxAngleRate))
+      angle = this.angle + Common.perFrameRate (maxAngleRate);
 
     setAngle (angle);
-    x = x - Math.sin (this.angle/ 180 * Math.PI) * SPEED_PER_SECOND / Common.frameRate;
-    y = y + Math.cos (this.angle / 180 * Math.PI) * SPEED_PER_SECOND / Common.frameRate;
+    x -= Math.sin (Common.degToRad (this.angle)) * Common.perFrameRate (SPEED_PER_SECOND);
+    y += Math.cos (Common.degToRad (this.angle)) * Common.perFrameRate (SPEED_PER_SECOND);
   }
 }
 
@@ -82,10 +86,11 @@ class SpiralBullet extends Enemy {
 
   override public function update (scene : Scene) {
 
-    x = x - Math.sin (this.directionAngle/ 180 * Math.PI) * SPEED_PER_SECOND / Common.frameRate;
-    y = y + Math.cos (this.directionAngle / 180 * Math.PI) * SPEED_PER_SECOND / Common.frameRate;
+    x -= Math.sin (Common.degToRad (this.directionAngle)) * Common.perFrameRate (SPEED_PER_SECOND);
+    y += Math.cos (Common.degToRad (this.directionAngle)) * Common.perFrameRate (SPEED_PER_SECOND);
   }
 }
+
 
 class BossOptionsFormation extends EnemyFormation {
 
@@ -105,7 +110,6 @@ class BossOptionsFormation extends EnemyFormation {
     addEnemy (new BossOption (initX+50.0, initY-30.0, -55.0));
     addEnemy (new BossOption (initX+50.0, initY-40.0, -60.0));
     addEnemy (new BossOption (initX+50.0, initY-50.0, -70.0));
-    
   }
 }
 
@@ -135,7 +139,7 @@ class BossWithOptions extends EnemyFormation {
 
   override public function update (scene : Scene) {
     super.update (scene);
-    if (bossBody.active && GameObjectManager.myShip.active && bossBody.hp > 1000) {
+    if (bossBody.active && GameObjectManager.myShip.active && bossBody.hp > 500) {
       if (frameCount % (2.0 * Common.frameRate) == 0)
         GameObjectManager.addEnemyFormation (scene, new BossOptionsFormation (bossBody.x, bossBody.y + bossBody.graphic.height/2.0));
       if (frameCount % (3.0 * Common.frameRate) == 0)
@@ -149,18 +153,30 @@ class BossWithOptions extends EnemyFormation {
 
     }
     else if (bossBody.active && GameObjectManager.myShip.active) {
+      if (!weaponChange) {
+        GameObjectManager.removeAllEnemyFormations (scene);
+        GameObjectManager.addEnemyFormation (scene, this);
+        weaponChange = true;
+      }
+      var perAngle = 6.0;
+      if (frameCount % (2/60 * Common.frameRate) == 0) {
       
-      var directionAngle = ((frameCount % (360 * 13)) * 13.0);
-      GameObjectManager.addEnemyFormation (scene, new SpiralBulletFormation (bossBody.x + 30.0, bossBody.y, directionAngle - 10.0));
-      GameObjectManager.addEnemyFormation (scene, new SpiralBulletFormation (bossBody.x - 30.0, bossBody.y, -directionAngle + 10.0));
+        var directionAngle = (frameCount % (360 * perAngle / Common.frameRate * 60.0)) * perAngle * Common.perFrameRate (60);
+      GameObjectManager.addEnemyFormation (scene, new SpiralBulletFormation (bossBody.x + 30.0, bossBody.y, directionAngle - 20.0));
+      
+      GameObjectManager.addEnemyFormation (scene, new SpiralBulletFormation (bossBody.x - 30.0, bossBody.y, -directionAngle + 20.0));
+      }
+
+      if (frameCount %  (Common.frameRate * 50/60) == 0) {
+        GameObjectManager.addEnemyFormation (scene, new SpiralBulletFormation (bossBody.x + 50.0, bossBody.y + bossBody.graphic.height / 2.0, -10.0));
+        GameObjectManager.addEnemyFormation (scene, new SpiralBulletFormation (bossBody.x - 50.0, bossBody.y + bossBody.graphic.height / 2.0, -10.0));
+        GameObjectManager.addEnemyFormation (scene, new SpiralBulletFormation (bossBody.x + 50.0, bossBody.y + bossBody.graphic.height / 2.0, 10.0));
+        GameObjectManager.addEnemyFormation (scene, new SpiralBulletFormation (bossBody.x - 50.0, bossBody.y + bossBody.graphic.height / 2.0, 10.0));
+      }
     }
 
-    if (bossBody.hp <= 1000 && !weaponChange) {
-      GameObjectManager.removeAllEnemyFormations (scene);
-      GameObjectManager.addEnemyFormation (scene, this);
-      weaponChange = true;
-    }
-    if (!bossBody.active && GameObjectManager.myShip.active)
+    
+    if (bossBody.hp <= 0 && GameObjectManager.myShip.active)
       GameObjectManager.removeAllEnemyFormations (scene);
   }
 }
