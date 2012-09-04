@@ -11,7 +11,6 @@ class GraphicCache {
   public static function loadGraphic (path:String, cache:Bool = true) {
     
     var bitmap : Bitmap;
-    var bitmapData : BitmapData;
 
     if (cache) {
       

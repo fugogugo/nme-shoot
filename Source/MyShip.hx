@@ -29,12 +29,6 @@ class MyShip extends Mover {
       x -= Common.perFrameRate (SPEED_PER_SECOND);
     if (KeyboardInput.pressedRight && x <= Common.width)
       x += Common.perFrameRate (SPEED_PER_SECOND);
-    if (hp <= 0) {
-      this.removeEffect (scene);
-      if (scene.contains (this))
-        scene.removeChild (this);
-    }
-    
   }
 
   public function fireBullet (scene : Scene) {

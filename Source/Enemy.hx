@@ -74,6 +74,8 @@ class EnemyFormation extends Mover {
     for (enemy in enemies) {
       if (enemy.isCollisionWithBullet && enemy.isCollision (bullet)) {
         enemy.hp -= bullet.power;
+        enemy.collisionEffect (scene);
+        bullet.collisionEffect (scene);
         GameObjectManager.removeBullet (scene, bullet);
         if (enemy.hp <= 0) {
           enemy.active = false;
@@ -92,17 +94,25 @@ class EnemyFormation extends Mover {
   public function detectCollisionWithMyShip (scene : Scene) {
     for (enemy in enemies) {
       if (GameObjectManager.myShip.isCollision (enemy)) {
-        GameObjectManager.myShip.hp -= power;
+        GameObjectManager.myShip.hp -= enemy.power;
+        GameObjectManager.myShip.collisionEffect (scene);
         if (GameObjectManager.myShip.hp <= 0) {
           GameObjectManager.myShip.active = false;
+          GameObjectManager.myShip.removeEffect (scene);
+          if (scene.contains (GameObjectManager.myShip))
+            scene.removeChild (GameObjectManager.myShip);
         }
       }
     }
     for (enemy in nonCollisionEnemies) {
       if (GameObjectManager.myShip.isCollision (enemy)) {
-        GameObjectManager.myShip.hp -= power;
+        GameObjectManager.myShip.hp -= enemy.power;
+        GameObjectManager.myShip.collisionEffect (scene);
         if (GameObjectManager.myShip.hp <= 0) {
           GameObjectManager.myShip.active = false;
+          GameObjectManager.myShip.removeEffect (scene);
+          if (scene.contains (GameObjectManager.myShip))
+            scene.removeChild (GameObjectManager.myShip);
         }
       }
     }

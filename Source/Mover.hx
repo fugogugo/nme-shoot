@@ -80,6 +80,9 @@ class Mover extends Sprite {
 
   // 削除時のエフェクト (サブクラスでオーバーライドする)
   public function removeEffect (scene : Scene) {
-    // エフェクト処理をするオブジェクトを追加する処理
+  }
+
+  // 衝突時のエフェクト (サブクラスでオーバーライドする)
+  public function collisionEffect (scene : Scene) { 
   }
 }
