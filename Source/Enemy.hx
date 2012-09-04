@@ -7,7 +7,6 @@ class Enemy extends Mover {
   public var score (default, null) : Int;
 
   public var isCollisionWithBullet : Bool;
-  public var isCollisionWithMyShip : Bool;
 
   function new (initX:Float, initY:Float, graphic:Sprite) {
     
@@ -19,8 +18,8 @@ class Enemy extends Mover {
     visible = false;
     active = false;
     isCollisionWithBullet = true;
-    isCollisionWithMyShip = true;
   }
+
 }
 
 
@@ -29,11 +28,13 @@ class Enemy extends Mover {
 class EnemyFormation extends Mover {
 
   public var enemies (default, null) : Array<Enemy>;
+  public var nonCollisionEnemies (default, null) : Array<Enemy>;
   var appearanceSec (default, null) : Float;
   var frameCount : Int;
 
   function new () {
     enemies = new Array<Enemy> ();
+    nonCollisionEnemies = new Array<Enemy> ();
     graphic = new Sprite ();
     appearanceSec = 0.0;
     frameCount = 0;
@@ -50,7 +51,11 @@ class EnemyFormation extends Mover {
         enemy.visible = true;
         enemy.active = true;
         enemy.update (scene);
-        if (!enemy.active) removeEnemy (enemy);
+      }
+      for (enemy in nonCollisionEnemies) {
+        enemy.visible = true;
+        enemy.active = true;
+        enemy.update (scene);
       }
       active = true;
       visible = true;
@@ -58,6 +63,8 @@ class EnemyFormation extends Mover {
     else {
       visible = false;
       for (enemy in enemies)
+        enemy.visible = false;
+      for (enemy in nonCollisionEnemies)
         enemy.visible = false;
     }
     frameCount++;
@@ -70,12 +77,13 @@ class EnemyFormation extends Mover {
         GameObjectManager.removeBullet (scene, bullet);
         if (enemy.hp <= 0) {
           enemy.active = false;
+          enemy.removeEffect (scene);
           removeEnemy (enemy);
           GameObjectManager.totalScore += enemy.score;
         }
       }
     }
-    if (enemies.length <= 0) {
+    if (enemies.length <= 0 && nonCollisionEnemies.length <= 0) {
       active = false;
       GameObjectManager.removeEnemyFormation (scene, this);
     }
@@ -83,11 +91,18 @@ class EnemyFormation extends Mover {
 
   public function detectCollisionWithMyShip (scene : Scene) {
     for (enemy in enemies) {
-      if (enemy.isCollisionWithMyShip && GameObjectManager.myShip.isCollision (enemy)) {
+      if (GameObjectManager.myShip.isCollision (enemy)) {
         GameObjectManager.myShip.hp -= power;
         if (GameObjectManager.myShip.hp <= 0) {
           GameObjectManager.myShip.active = false;
-          scene.removeChild (GameObjectManager.myShip);
+        }
+      }
+    }
+    for (enemy in nonCollisionEnemies) {
+      if (GameObjectManager.myShip.isCollision (enemy)) {
+        GameObjectManager.myShip.hp -= power;
+        if (GameObjectManager.myShip.hp <= 0) {
+          GameObjectManager.myShip.active = false;
         }
       }
     }
@@ -100,19 +115,30 @@ class EnemyFormation extends Mover {
         removeEnemy (enemy);
       }
     }
-    if (enemies.length <= 0) {
+    for (enemy in nonCollisionEnemies) {
+      if ( enemy.x < -100.0 || enemy.x > Common.width + 100.0
+           || enemy.y < -100.0 || enemy.y > Common.height + 100.0 ) {
+        removeEnemy (enemy);
+      }
+    }
+    if (enemies.length <= 0 && nonCollisionEnemies.length <= 0) {
       GameObjectManager.removeEnemyFormation (scene, this);
 
     }
   }
 
   public function addEnemy (enemy : Enemy) {
-    enemies.push (enemy);
+    if (enemy.isCollisionWithBullet)
+      enemies.push (enemy);
+    else
+      nonCollisionEnemies.push (enemy);
     addChild (enemy);
   }
 
   public function removeEnemy (enemy : Enemy) {
+    nonCollisionEnemies.remove (enemy);
     enemies.remove (enemy);
-    removeChild (enemy);
+    if (contains (enemy))
+      removeChild (enemy);
   }
 }

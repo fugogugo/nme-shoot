@@ -29,8 +29,12 @@ class MyShip extends Mover {
       x -= Common.perFrameRate (SPEED_PER_SECOND);
     if (KeyboardInput.pressedRight && x <= Common.width)
       x += Common.perFrameRate (SPEED_PER_SECOND);
-   
-    if (hp < 0) hp = 0;
+    if (hp <= 0) {
+      this.removeEffect (scene);
+      if (scene.contains (this))
+        scene.removeChild (this);
+    }
+    
   }
 
   public function fireBullet (scene : Scene) {
@@ -43,12 +47,13 @@ class MyShip extends Mover {
       var bullet2 = new Bullet (x, y - height / 2.0, 22.5);
       var bullet3 = new Bullet (x, y - height / 2.0, -45.0);
       var bullet4 = new Bullet (x, y - height / 2.0, 45.0);
-      
+
       GameObjectManager.bullets.push (bullet0);
       GameObjectManager.bullets.push (bullet1);
       GameObjectManager.bullets.push (bullet2);
       GameObjectManager.bullets.push (bullet3);
       GameObjectManager.bullets.push (bullet4);
+
       scene.addChild (bullet0);
       scene.addChild (bullet1);
       scene.addChild (bullet2);

@@ -36,12 +36,14 @@ class GameObjectManager {
 
   public static function removeBullet (scene : Scene, bullet : Bullet) {
     bullets.remove (bullet);
-    scene.removeChild (bullet);
+    if (scene.contains (bullet))
+      scene.removeChild (bullet);
   }
 
   public static function removeAllBullets (scene : Scene) {
     for (bullet in bullets)
-      scene.removeChild (bullet);
+      if (scene.contains (bullet))
+        scene.removeChild (bullet);
     bullets = new Array<Bullet> ();
   }
 
@@ -52,12 +54,14 @@ class GameObjectManager {
 
   public static function removeEnemyFormation (scene : Scene, enemyFormation : EnemyFormation) {
     enemyFormations.remove (enemyFormation);
-    scene.removeChild (enemyFormation);
+    if (scene.contains (enemyFormation))
+      scene.removeChild (enemyFormation);
   }
 
   public static function removeAllEnemyFormations (scene : Scene) {
     for (enemyFormation in enemyFormations)
-      scene.removeChild (enemyFormation);
+      if (scene.contains (enemyFormation))
+        scene.removeChild (enemyFormation);
     enemyFormations = new Array<EnemyFormation> ();
   }
 
@@ -68,7 +72,6 @@ class GameObjectManager {
         enemyFormation.detectCollisionWithBullet (scene, bullet);
       }
     }
-
     if (myShip.active) {
       for (enemyFormation in enemyFormations) {
         enemyFormation.detectCollisionWithMyShip (scene);

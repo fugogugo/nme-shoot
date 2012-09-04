@@ -68,6 +68,7 @@ class BossOption extends Enemy {
 }
 
 
+// 旋回弾
 class SpiralBullet extends Enemy {
   static inline var SPEED_PER_SECOND = 200.0;
   var directionAngle : Float;
@@ -92,6 +93,7 @@ class SpiralBullet extends Enemy {
 }
 
 
+// ボスの誘導弾の攻撃
 class BossOptionsFormation extends EnemyFormation {
 
   public function new (initX:Float, initY:Float) {
@@ -113,6 +115,7 @@ class BossOptionsFormation extends EnemyFormation {
   }
 }
 
+// ボスの旋回弾の攻撃
 class SpiralBulletFormation extends EnemyFormation {
 
   public function new (initX:Float, initY:Float, directionAngle : Float) {
@@ -122,7 +125,7 @@ class SpiralBulletFormation extends EnemyFormation {
   }
 }
 
-
+// ボス
 class BossWithOptions extends EnemyFormation {
 
   var bossBody : BossBody;
@@ -139,6 +142,7 @@ class BossWithOptions extends EnemyFormation {
 
   override public function update (scene : Scene) {
     super.update (scene);
+    // HPが500までは誘導弾での攻撃、500以下になったら旋回弾の攻撃に変更
     if (bossBody.active && GameObjectManager.myShip.active && bossBody.hp > 500) {
       if (frameCount % (2.0 * Common.frameRate) == 0)
         GameObjectManager.addEnemyFormation (scene, new BossOptionsFormation (bossBody.x, bossBody.y + bossBody.graphic.height/2.0));

@@ -77,4 +77,9 @@ class Mover extends Sprite {
     
     return this.angle = angle;
   }
+
+  // 削除時のエフェクト (サブクラスでオーバーライドする)
+  public function removeEffect (scene : Scene) {
+    // エフェクト処理をするオブジェクトを追加する処理
+  }
 }

@@ -88,16 +88,11 @@ class Stage2Scene extends GameScene {
 
   var frameCount : Int;
   static var stageEndSec = 18.0;
-
-  var titleTextField : TextField;
   
   public function new () {
     super ();
 
     frameCount = 0;
-
-    titleTextField = new TextField ();
-    addChild (titleTextField);
 
     GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (130.0, 0.0, 3.0));
     GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (200.0, 0.0, 3.0));
@@ -122,46 +117,13 @@ class Stage2Scene extends GameScene {
     super.update ();
     frameCount++;
 
-    if (titleTextField != null) {
-      updateTitleTextField ("Next Stage Start!", 150.0, 300.0);
-    }
-
-    if (frameCount >= Common.frameRate * 3 && titleTextField != null) {
-      removeChild (titleTextField); titleTextField = null;
-    }
-
     if (frameCount >= stageEndSec * Common.frameRate && GameObjectManager.myShip.active) {
       var nextStage = new Stage3Scene ();
       return Next (nextStage);
     }
     return gameContinue(Stage1Scene);
   }
-
-  function updateTitleTextField (title:String, x:Float, y:Float) {
-    titleTextField.x = x;
-    titleTextField.y = y;
-    titleTextField.text = title;
-    titleTextField.selectable = false;
-
-    var tf = new TextFormat ("_sans", 30, 0x333333);
-
-    #if (html5||js)
-    var w:Float = Lib.current.stage.stageWidth;
-    var h:Float = Lib.current.stage.stageHeight;
-
-    titleTextField.x = (w - titleTextField.width) / 2;
-    titleTextField.y = (h - titleTextField.height) / 2;
-
-    #else
-    titleTextField.width = 300.0;
-    tf.align = TextFormatAlign.CENTER;
-    #end
-    
-    titleTextField.setTextFormat (tf);
-    titleTextField.alpha = 30;
-  }
 }
-
 
 // Boss Stage
 class Stage3Scene extends GameScene {
