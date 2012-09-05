@@ -30,32 +30,31 @@ class EnemyFormation extends Mover {
   public var enemies (default, null) : Array<Enemy>;
   public var nonCollisionEnemies (default, null) : Array<Enemy>;
   var appearanceSec (default, null) : Float;
-  var frameCount : Int;
 
   function new () {
     enemies = new Array<Enemy> ();
     nonCollisionEnemies = new Array<Enemy> ();
     graphic = new Sprite ();
     appearanceSec = 0.0;
-    frameCount = 0;
     super (0.0, 0.0, graphic);
     active = false;
     visible = false;
   }
 
   override public function update (scene : Scene) {
+    super.update (scene);
 
     if (appearanceSec <= Common.perFrameRate (frameCount)) {
-
-      for (enemy in enemies) {
+      var enemyUpdate = function (enemy : Enemy) {
         enemy.visible = true;
         enemy.active = true;
         enemy.update (scene);
+      };
+      for (enemy in enemies) {
+        enemyUpdate (enemy);
       }
       for (enemy in nonCollisionEnemies) {
-        enemy.visible = true;
-        enemy.active = true;
-        enemy.update (scene);
+        enemyUpdate (enemy);
       }
       active = true;
       visible = true;
@@ -67,7 +66,6 @@ class EnemyFormation extends Mover {
       for (enemy in nonCollisionEnemies)
         enemy.visible = false;
     }
-    frameCount++;
   }
 
   public function detectCollisionWithBullet (scene : Scene, bullet:Bullet) {
@@ -92,7 +90,7 @@ class EnemyFormation extends Mover {
   }
 
   public function detectCollisionWithMyShip (scene : Scene) {
-    for (enemy in enemies) {
+    var collisionProcedure = function (enemy : Enemy) {
       if (GameObjectManager.myShip.isCollision (enemy)) {
         GameObjectManager.myShip.hp -= enemy.power;
         GameObjectManager.myShip.collisionEffect (scene);
@@ -104,37 +102,32 @@ class EnemyFormation extends Mover {
         }
       }
     }
+
+    for (enemy in enemies) {
+      collisionProcedure (enemy);
+    }
     for (enemy in nonCollisionEnemies) {
-      if (GameObjectManager.myShip.isCollision (enemy)) {
-        GameObjectManager.myShip.hp -= enemy.power;
-        GameObjectManager.myShip.collisionEffect (scene);
-        if (GameObjectManager.myShip.hp <= 0) {
-          GameObjectManager.myShip.active = false;
-          GameObjectManager.myShip.removeEffect (scene);
-          if (scene.contains (GameObjectManager.myShip))
-            scene.removeChild (GameObjectManager.myShip);
-        }
-      }
+      collisionProcedure (enemy);
     }
   }
 
   public function deleteOutsideEnemy (scene : Scene) {
-    for (enemy in enemies) {
-      if ( enemy.x < -100.0 || enemy.x > Common.width + 100.0
-           || enemy.y < -100.0 || enemy.y > Common.height + 100.0 ) {
-        removeEnemy (enemy);
-      }
-    }
-    for (enemy in nonCollisionEnemies) {
-      if ( enemy.x < -100.0 || enemy.x > Common.width + 100.0
-           || enemy.y < -100.0 || enemy.y > Common.height + 100.0 ) {
-        removeEnemy (enemy);
-      }
-    }
-    if (enemies.length <= 0 && nonCollisionEnemies.length <= 0) {
-      GameObjectManager.removeEnemyFormation (scene, this);
 
+    var outsideLength = 100.0;
+    var deleteEnemy = function (enemy : Enemy) {
+      if ( enemy.x < -outsideLength || enemy.x > Common.width + outsideLength
+           || enemy.y < -outsideLength || enemy.y > Common.height + outsideLength )
+        removeEnemy (enemy);
     }
+
+    for (enemy in enemies)
+      deleteEnemy (enemy);
+
+    for (enemy in nonCollisionEnemies)
+      deleteEnemy (enemy);
+
+    if (enemies.length <= 0 && nonCollisionEnemies.length <= 0)
+      GameObjectManager.removeEnemyFormation (scene, this);
   }
 
   public function addEnemy (enemy : Enemy) {

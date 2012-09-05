@@ -1,34 +1,33 @@
-import nme.display.Sprite;
-import nme.Assets;
-import nme.Lib;
 
 // 自機クラス
 class MyShip extends Mover {
 
-  static inline var graphicPath = "images/MyShip.png";
-
+  static inline var GRAPHIC_PATH = "images/MyShip.png";
   static inline var SPEED_PER_SECOND = 180.0;
   public static inline var BULLET_RATE = 10.0;
 
+  var initX : Float;
+  var initY : Float;
+
   public function new () {
+    initX = Common.width / 2.0;
+    initY = Common.height - 100.0;
+    setGraphic (GRAPHIC_PATH);
     
-    setGraphic (graphicPath);
-    
-    super (Common.width / 2.0, Common.height - 100.0, graphic);
+    super (initX, initY, graphic);
     hp = 1;
     hitRange = 5.0;
   }
 
   override public function update (scene : Scene) {
-    
+    if (KeyboardInput.pressedLeft && x >= 0.0)
+      x -= Common.perFrameRate (SPEED_PER_SECOND);
+    if (KeyboardInput.pressedRight && x <= Common.width)
+      x += Common.perFrameRate (SPEED_PER_SECOND);    
     if (KeyboardInput.pressedUp && y >= 0.0)
       y -= Common.perFrameRate (SPEED_PER_SECOND);
     if (KeyboardInput.pressedDown && y <= Common.height)
       y += Common.perFrameRate (SPEED_PER_SECOND);
-    if (KeyboardInput.pressedLeft && x >= 0.0)
-      x -= Common.perFrameRate (SPEED_PER_SECOND);
-    if (KeyboardInput.pressedRight && x <= Common.width)
-      x += Common.perFrameRate (SPEED_PER_SECOND);
   }
 
   public function fireBullet (scene : Scene) {

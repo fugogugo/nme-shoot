@@ -4,14 +4,14 @@ import Enemy;
 // 凧型の敵
 class KiteEnemy extends Enemy {
 
-  static inline var graphicPath = "images/Enemy01.png";
+  static inline var GRAPHIC_PATH = "images/Enemy01.png";
 
   var speedPerSecond : Float;
 
   var random : Bool;
 
   public function new (initX : Float, initY : Float, speedPerSecond : Float) {
-    setGraphic (graphicPath);
+    setGraphic (GRAPHIC_PATH);
     super (initX, initY, graphic);
     hitRange = 15.0;
     hp = 10;

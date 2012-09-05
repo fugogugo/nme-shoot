@@ -10,6 +10,16 @@ enum NextScene {
 // シーンクラス
 class Scene extends Sprite {
 
+  var frameCount : Int;
+
   public var scoreTextField : TextField;
-  public function update () { return Remaining; }
+  public function new () {
+    super ();
+    frameCount = 0;
+  }
+
+  public function update () {
+    ++frameCount;
+    return Remaining;
+  }
 }

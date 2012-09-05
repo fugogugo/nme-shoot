@@ -4,13 +4,15 @@ import nme.Lib;
 
 import StageScene;
 
-// ゲームを管理するクラス
+// ゲームを実行するクラス
 class Main extends Sprite {
 
   var currentScene : Scene;
 
   public function new () {
     super ();
+
+    // fpsごとに呼び出し
     addEventListener ( Event.ENTER_FRAME, this_onEnterFrame );
     KeyboardInput.initialize ();
     Common.initialize ();
@@ -22,6 +24,7 @@ class Main extends Sprite {
 
   // メインループのメソッド
   function this_onEnterFrame (event:Event):Void {
+    // シーンの更新
     switch (currentScene.update ()) {
     case Remaining : return;
     case Next (s) : {

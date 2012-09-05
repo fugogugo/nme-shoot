@@ -46,12 +46,8 @@ class GameScene extends Scene {
   }
 
   override public function update () : NextScene {
-    GameObjectManager.detectCollision (this);
-    GameObjectManager.myShip.update (this);
-    GameObjectManager.fireBullet (this);
-    for (bullet in GameObjectManager.bullets) { bullet.update (this); }
-    GameObjectManager.deleteOutsideObject (this);
-    for (enemyFormation in GameObjectManager.enemyFormations) { enemyFormation.update (this); }
+    super.update ();
+    GameObjectManager.update (this);
 
     // スコアの表示
     updateTextField (scoreTextField,

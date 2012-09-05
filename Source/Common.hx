@@ -1,8 +1,8 @@
 import nme.Lib;
 
 class Common {
-  public static inline var width = 600.0;
-  public static inline var height = 700.0;
+  public static var width = 600.0;
+  public static var height = 700.0;
   public static var frameRate = 60.0;
 
   private static var slow = 1.0;

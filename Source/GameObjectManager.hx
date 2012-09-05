@@ -13,6 +13,15 @@ class GameObjectManager {
 
   public static var frameCountForBullet : Float = 0;
 
+  public static function update (scene : Scene) {
+    detectCollision (scene);
+    myShip.update (scene);
+    fireBullet (scene);
+    for (bullet in bullets) { bullet.update (scene); }
+    deleteOutsideObject (scene);
+    for (enemyFormation in enemyFormations) { enemyFormation.update (scene); }
+  }
+
   public static function fireBullet (scene : Scene) {
     myShip.fireBullet (scene);
   }

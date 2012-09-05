@@ -9,8 +9,7 @@ import nme.text.TextFormatAlign;
 // Stage1
 class Stage1Scene extends GameScene {
 
-  var frameCount : Int;
-  static inline var stageEndSec = 17.0;
+  var stageEndSec = 17.0;
 
   var titleTextField : TextField;
 
@@ -18,7 +17,6 @@ class Stage1Scene extends GameScene {
   public function new () {
     super ();
 
-    frameCount = 0;
     titleTextField = new TextField ();
     addChild (titleTextField);
     
@@ -35,8 +33,6 @@ class Stage1Scene extends GameScene {
 
   override public function update () :NextScene {
     super.update ();
-
-    frameCount++;
 
     if (titleTextField != null) {
       updateTitleTextField ("New Game Start!", Common.width / 4.0, Common.width / 2.0);
@@ -86,13 +82,10 @@ class Stage1Scene extends GameScene {
 // Stage2
 class Stage2Scene extends GameScene {
 
-  var frameCount : Int;
   static var stageEndSec = 18.0;
   
   public function new () {
     super ();
-
-    frameCount = 0;
 
     GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (130.0, 0.0, 3.0));
     GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (200.0, 0.0, 3.0));
@@ -115,7 +108,6 @@ class Stage2Scene extends GameScene {
 
   override public function update () :NextScene {
     super.update ();
-    frameCount++;
 
     if (frameCount >= stageEndSec * Common.frameRate && GameObjectManager.myShip.active) {
       var nextStage = new Stage3Scene ();
@@ -125,16 +117,15 @@ class Stage2Scene extends GameScene {
   }
 }
 
+
 // Boss Stage
 class Stage3Scene extends GameScene {
 
-  var frameCount : Int;
   var boss : BossWithOptions;
   var bossLifeTextField : TextField;
 
   public function new () {
     super ();
-    frameCount = 0;
 
     boss = new BossWithOptions ();
     GameObjectManager.addEnemyFormation (this, boss);
@@ -145,7 +136,6 @@ class Stage3Scene extends GameScene {
 
   override public function update () :NextScene {
     super.update ();
-    frameCount++;
     if (boss.active)
       updateTextField (bossLifeTextField, "Boss : " + Std.string (boss.enemies[0].hp),
                        400.0, 0.0, 160.0, 20.0);

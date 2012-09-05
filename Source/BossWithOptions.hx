@@ -3,16 +3,14 @@ import nme.Lib;
 
 class BossBody extends Enemy {
 
-  static inline var graphicPath = "images/BossBody.png";
-  static inline var movingWidth = 100.0;
-  static inline var movingHeight = 120.0;
-  static inline var slideStartSec = 8.0;
-  static inline var movingYSec = 6.0;
-
-  var frameCount : Int;
+  static inline var GRAPHIC_PATH = "images/BossBody.png";
+  static inline var MOVING_WIDTH = 100.0;
+  static inline var MOVING_HEIGHT = 120.0;
+  static inline var SLIDE_START_SEC = 8.0;
+  static inline var MOVING_Y_SEC = 6.0;
 
   public function new (initX : Float, initY : Float) {
-    setGraphic (graphicPath);
+    setGraphic (GRAPHIC_PATH);
     super (initX, initY, graphic);
     hitRange = 95.0;
     hp = 1000;
@@ -23,27 +21,23 @@ class BossBody extends Enemy {
   }
 
   override public function update (scene : Scene) {
-    if (Common.perFrameRate (frameCount) <= movingYSec)
-      y += Common.perFrameRate (movingHeight / movingYSec);
-    else if (Common.perFrameRate (frameCount) >= slideStartSec)
-      x = Math.sin (Common.perFrameRate (frameCount) - slideStartSec)
-        * movingWidth + Common.width / 2.0;
-
-    frameCount++;
-
+    super.update (scene);
+    if (Common.perFrameRate (frameCount) <= MOVING_Y_SEC)
+      y += Common.perFrameRate (MOVING_HEIGHT / MOVING_Y_SEC);
+    else if (Common.perFrameRate (frameCount) >= SLIDE_START_SEC)
+      x = Math.sin (Common.perFrameRate (frameCount) - SLIDE_START_SEC)
+        * MOVING_WIDTH + Common.width / 2.0;
   }
 }
 
 class BossOption extends Enemy {
-  static inline var maxAngleRate : Float = 40.0;
+  static inline var MAX_ANGLE_RATE : Float = 40.0;
   static inline var SPEED_PER_SECOND = 240.0;
   
-  static inline var graphicPath = "images/BossOption.png";
-
-  var frameCount : Int;
+  static inline var GRAPHIC_PATH = "images/BossOption.png";
 
   public function new (initX : Float, initY : Float, initAngle : Float) {
-    setGraphic (graphicPath);
+    setGraphic (GRAPHIC_PATH);
     super (initX, initY, graphic);
     hitRange = 15.0;
     hp = 5;
@@ -54,12 +48,13 @@ class BossOption extends Enemy {
   }
 
   override public function update (scene : Scene) {
+    super.update (scene);
     var angle = -Common.radToDeg (Math.atan2 (GameObjectManager.myShip.x - x, GameObjectManager.myShip.y - y));
 
-    if (angle - this.angle < Common.perFrameRate (-maxAngleRate))
-      angle = this.angle - Common.perFrameRate (maxAngleRate);
-    else if (angle - this.angle > Common.perFrameRate (maxAngleRate))
-      angle = this.angle + Common.perFrameRate (maxAngleRate);
+    if (angle - this.angle < Common.perFrameRate (-MAX_ANGLE_RATE))
+      angle = this.angle - Common.perFrameRate (MAX_ANGLE_RATE);
+    else if (angle - this.angle > Common.perFrameRate (MAX_ANGLE_RATE))
+      angle = this.angle + Common.perFrameRate (MAX_ANGLE_RATE);
 
     setAngle (angle);
     x -= Math.sin (Common.degToRad (this.angle)) * Common.perFrameRate (SPEED_PER_SECOND);
@@ -73,12 +68,12 @@ class SpiralBullet extends Enemy {
   static inline var SPEED_PER_SECOND = 200.0;
   var directionAngle : Float;
   
-  static inline var graphicPath = "images/SpiralBullet.png";
+  static inline var GRAPHIC_PATH = "images/SpiralBullet.png";
 
   static var frameCount = 0;
 
   public function new (initX : Float, initY : Float, directionAngle : Float) {
-    setGraphic (graphicPath);
+    setGraphic (GRAPHIC_PATH);
     super (initX, initY, graphic);
     hitRange = 15.0;
     isCollisionWithBullet = false;
@@ -86,7 +81,7 @@ class SpiralBullet extends Enemy {
   }
 
   override public function update (scene : Scene) {
-
+    super.update (scene);
     x -= Math.sin (Common.degToRad (this.directionAngle)) * Common.perFrameRate (SPEED_PER_SECOND);
     y += Math.cos (Common.degToRad (this.directionAngle)) * Common.perFrameRate (SPEED_PER_SECOND);
   }

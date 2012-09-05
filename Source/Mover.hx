@@ -1,6 +1,4 @@
 import nme.display.Sprite;
-import nme.display.Bitmap;
-import nme.Assets;
 
 // ゲームオブジェクトのクラス
 class Mover extends Sprite {
@@ -26,6 +24,8 @@ class Mover extends Sprite {
   // 攻撃力
   public var power (default, null) : Int;
 
+  var frameCount : Int;
+
 
 
   public function new (x:Float = 0.0, y:Float = 0.0, image:Sprite) {
@@ -44,11 +44,13 @@ class Mover extends Sprite {
 
     graphic.x = - graphic.width / 2.0;
     graphic.y = - graphic.height / 2.0;
+
+    frameCount = 0;
   }
 
-  // フレームごとの処理 (サブクラスでオーバーライドする)
+  // フレームごとの処理
   public function update (scene : Scene) : Void {
-    
+    ++frameCount;
   }
 
   // 当たり判定 (半径でのみ判定)
