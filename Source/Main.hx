@@ -18,7 +18,7 @@ class Main extends Sprite {
     Common.initialize ();
     
     Common.setSlow (1.0);
-    currentScene = new Stage1Scene ();
+    currentScene = new StartScene ();
     Lib.current.addChild (currentScene);
   }
 
