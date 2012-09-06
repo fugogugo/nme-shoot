@@ -11,17 +11,26 @@ class GameObjectManager {
   
   public static var totalScore : Int = 0;
 
-  public static var frameCountForBullet : Float = 0;
+  static var totalFrameCount : Int = 0;
+  static var frameCountForBullet : Int = 0;
+
+  public static function initialize () {
+    myShip = new MyShip ();
+  }
 
   public static function update (scene : Scene) {
-    detectCollision (scene);
-    myShip.update (scene);
-    fireBullet (scene);
-    for (bullet in bullets) { bullet.update (scene); }
-    deleteOutsideObject (scene);
-    for (enemyFormation in enemyFormations) { enemyFormation.update (scene); }
+    if (myShip != null && bullets != null && enemyFormations != null) {
+      detectCollision (scene);
+      myShip.update (scene);
+      fireBullet (scene);
+      for (bullet in bullets) { bullet.update (scene); }
+      deleteOutsideObject (scene);
+      for (enemyFormation in enemyFormations) { enemyFormation.update (scene); }
+    }
     ++frameCountForBullet;
   }
+
+  public static function updateTotalFrameCount () { ++totalFrameCount; }
 
   public static function fireBullet (scene : Scene) {
     myShip.fireBullet (scene);
@@ -87,5 +96,12 @@ class GameObjectManager {
         enemyFormation.detectCollisionWithMyShip (scene);
       }
     }
+  }
+
+  public static function getTotalFrameCount () { return totalFrameCount; }
+  public static function getFrameCountForBullet () { return frameCountForBullet; }
+  public static function resetFrameCountForBullet () { frameCountForBullet = 0; }
+  public static function setFrameCountForBullet (count : Int) {
+    frameCountForBullet =  count;
   }
 }

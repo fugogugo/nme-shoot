@@ -4,7 +4,7 @@ class MyShip extends Mover {
 
   static inline var GRAPHIC_PATH = "images/MyShip.png";
   static inline var SPEED_PER_SECOND = 180.0;
-  static inline var BULLET_RATE = 10.0;
+  static inline var BULLET_RATE = 10;
 
   var initX : Float;
   var initY : Float;
@@ -18,7 +18,7 @@ class MyShip extends Mover {
     hp = 1;
     hitRange = 5.0;
 
-    GameObjectManager.frameCountForBullet = Common.getFrameRate () / BULLET_RATE;
+    GameObjectManager.setFrameCountForBullet (Std.int (Common.getFrameRate () / BULLET_RATE));
   }
 
   override public function update (scene : Scene) {
@@ -34,13 +34,13 @@ class MyShip extends Mover {
 
   public function fireBullet (scene : Scene) {
     if (KeyboardInput.pressedZ
-        && GameObjectManager.frameCountForBullet >= Common.getFrameRate () / BULLET_RATE
+        && GameObjectManager.getFrameCountForBullet () >= Common.getFrameRate () / BULLET_RATE
         && active) {
-      GameObjectManager.frameCountForBullet = 0.0;
+      GameObjectManager.resetFrameCountForBullet ();
       addBullets (scene);
       }
     if (!KeyboardInput.pressedZ)
-      GameObjectManager.frameCountForBullet = Common.getFrameRate () / BULLET_RATE;
+      GameObjectManager.setFrameCountForBullet (Std.int (Common.getFrameRate () / BULLET_RATE));
   }
 
   function addBullets (scene : Scene) {

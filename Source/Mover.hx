@@ -1,4 +1,5 @@
 import nme.display.Sprite;
+import nme.Lib;
 
 // ゲームオブジェクトのクラス
 class Mover extends Sprite {
@@ -24,9 +25,8 @@ class Mover extends Sprite {
   // 攻撃力
   public var power (default, null) : Int;
 
-  var frameCount : Int;
-
-
+  // 処理開始時のフレーム数
+  var startFrameCount : Null<Int>;
 
   public function new (x:Float = 0.0, y:Float = 0.0, image:Sprite) {
     super ();
@@ -45,12 +45,14 @@ class Mover extends Sprite {
     graphic.x = - graphic.width / 2.0;
     graphic.y = - graphic.height / 2.0;
 
-    frameCount = 0;
+    startFrameCount = null;
   }
 
   // フレームごとの処理
   public function update (scene : Scene) : Void {
-    ++frameCount;
+    if (startFrameCount == null) {
+      startFrameCount = GameObjectManager.getTotalFrameCount ();
+    }
   }
 
   // 当たり判定 (半径でのみ判定)
@@ -86,5 +88,13 @@ class Mover extends Sprite {
 
   // 衝突時のエフェクト (サブクラスでオーバーライドする)
   public function collisionEffect (scene : Scene) { 
+  }
+
+  // 処理を開始してからのフレーム数
+  function frameCount () {
+    if (startFrameCount == null)
+      return 0;
+    else
+      return GameObjectManager.getTotalFrameCount () - startFrameCount;
   }
 }

@@ -38,11 +38,12 @@ class Stage1Scene extends GameScene {
       updateTitleTextField ("New Game Start!", Common.WIDTH / 4.0, Common.WIDTH / 2.0);
     }
 
-    if (frameCount >= Common.getFrameRate () * 3 && titleTextField != null) {
+    if (frameCount () >= Common.getFrameRate () * 3 && titleTextField != null) {
       removeChild (titleTextField); titleTextField = null;
     }
 
-    if (frameCount >= STAGE_END_SEC * Common.getFrameRate () && GameObjectManager.myShip.active) {
+    if (frameCount () >= STAGE_END_SEC * Common.getFrameRate ()
+        && GameObjectManager.myShip.active) {
       var nextStage = new Stage2Scene ();
       return Next (nextStage);
     }
@@ -109,7 +110,8 @@ class Stage2Scene extends GameScene {
   override public function update () :NextScene {
     super.update ();
 
-    if (frameCount >= STAGE_END_SEC * Common.getFrameRate () && GameObjectManager.myShip.active) {
+    if (frameCount () >= STAGE_END_SEC * Common.getFrameRate ()
+        && GameObjectManager.myShip.active) {
       var nextStage = new Stage3Scene ();
       return Next (nextStage);
     }

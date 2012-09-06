@@ -53,22 +53,6 @@ class GameScene extends Scene {
     return Remaining;
   }
 
-  // テキストフィールドの更新
-  function updateTextField (textField : TextField, text : String,
-                            x:Float, y:Float, w:Float, h:Float,
-                            ?fontSize:Float=20) {
-    textField.x = x;
-    textField.y = y;
-    textField.width = w;
-    textField.text = text;
-    textField.selectable = false;
-
-    var tf = new TextFormat ("_sans", fontSize, 0x333333);
-    tf.align = TextFormatAlign.LEFT;
-    textField.setTextFormat (tf);
-    textField.alpha = 30;
-  }
-
 
   // コンティニュー
   function gameContinue (sceneClass : Class<Dynamic>) {

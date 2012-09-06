@@ -36,8 +36,8 @@ class StartScene extends Scene {
   override public function update () {
     super.update ();
     var alphaSec = 2.5;
-    if (Common.perFrameRate (frameCount) < alphaSec) {
-      titleGraphic.alpha = Common.perFrameRate (frameCount) / alphaSec;
+    if (Common.perFrameRate (frameCount ()) < alphaSec) {
+      titleGraphic.alpha = Common.perFrameRate (frameCount ()) / alphaSec;
       startTextGraphic.visible = false;
     }
     else {
@@ -45,6 +45,7 @@ class StartScene extends Scene {
       if (KeyboardInput.pressedZ)
         return Next (new Stage1Scene ());
     }
+
     return Remaining;
   }
 }

@@ -16,17 +16,16 @@ class BossBody extends Enemy {
     hitRange = 95.0;
     hp = 1000;
     score = 10000;
-    frameCount = 0;
 
     x = Common.WIDTH / 2.0;
   }
 
   override public function update (scene : Scene) {
     super.update (scene);
-    if (Common.perFrameRate (frameCount) <= MOVING_Y_SEC)
+    if (Common.perFrameRate (frameCount ()) <= MOVING_Y_SEC)
       y += Common.perFrameRate (MOVING_HEIGHT / MOVING_Y_SEC);
-    else if (Common.perFrameRate (frameCount) >= SLIDE_START_SEC)
-      x = Math.sin (Common.perFrameRate (frameCount) - SLIDE_START_SEC)
+    else if (Common.perFrameRate (frameCount ()) >= SLIDE_START_SEC)
+      x = Math.sin (Common.perFrameRate (frameCount ()) - SLIDE_START_SEC)
         * MOVING_WIDTH + Common.WIDTH / 2.0;
   }
 }
@@ -44,7 +43,6 @@ class BossOption extends Enemy {
     hitRange = 15.0;
     hp = 5;
     score = 10;
-    frameCount = 0;
     isCollisionWithBullet = false;
     setAngle (initAngle);
   }
@@ -71,8 +69,6 @@ class SpiralBullet extends Enemy {
   var directionAngle : Float;
   
   static inline var GRAPHIC_PATH = "images/SpiralBullet.png";
-
-  static var frameCount = 0;
 
   public function new (initX : Float, initY : Float, directionAngle : Float) {
     setGraphic (GRAPHIC_PATH);
@@ -133,7 +129,6 @@ class BossWithOptions extends EnemyFormation {
     bossBody = new BossBody (0.0, 0.0);
     addEnemy (bossBody);
 
-    frameCount = 0;
     weaponChange = false;
   }
 
@@ -144,15 +139,15 @@ class BossWithOptions extends EnemyFormation {
 
     // HPが500までは誘導弾での攻撃、500以下になったら旋回弾の攻撃に変更
     if (bossBody.active && GameObjectManager.myShip.active && bossBody.hp > 500) {
-      if (frameCount % (2.0 * Common.getFrameRate ()) == 0)
+      if ((frameCount () + 1) % (2.0 * Common.getFrameRate ()) == 0)
         GameObjectManager.addEnemyFormation (scene, new BossOptionsFormation (bossBody.x, bossBody.y + bossBody.graphic.height/2.0));
-      if (frameCount % (3.0 * Common.getFrameRate ()) == 0)
+      if ((frameCount () + 1) % (3.0 * Common.getFrameRate ()) == 0)
         GameObjectManager.addEnemyFormation (scene, new BossOptionsFormation (bossBody.x, bossBody.y + bossBody.graphic.height/2.0 - 20.0));
 
-      if (frameCount % (5.0 * Common.getFrameRate ()) == 0)
+      if ((frameCount () + 1) % (5.0 * Common.getFrameRate ()) == 0)
         GameObjectManager.addEnemyFormation (scene, new BossOptionsFormation (bossBody.x, bossBody.y + bossBody.graphic.height/2.0 - 40.0));
 
-      if (frameCount % (10.0 * Common.getFrameRate ()) == 0)
+      if ((frameCount () + 1) % (10.0 * Common.getFrameRate ()) == 0)
         GameObjectManager.addEnemyFormation (scene, new BossOptionsFormation (bossBody.x, bossBody.y + bossBody.graphic.height/2.0 - 60.0));
 
     }
@@ -163,9 +158,9 @@ class BossWithOptions extends EnemyFormation {
         weaponChange = true;
       }
       var anglePerBullet = 6.0;
-      if (frameCount % (2/60 * Common.getFrameRate ()) == 0) {
+      if (frameCount () % (2/60 * Common.getFrameRate ()) == 0) {
       
-        var directionAngle = (frameCount % (360 * anglePerBullet / Common.getFrameRate () * 60.0)) * anglePerBullet * Common.perFrameRate (60);
+        var directionAngle = (frameCount () % (360 * anglePerBullet / Common.getFrameRate () * 60.0)) * anglePerBullet * Common.perFrameRate (60);
       GameObjectManager.addEnemyFormation (scene, new SpiralBulletFormation (bossBody.x + 30.0, bossBody.y, directionAngle - 20.0));
       
       GameObjectManager.addEnemyFormation (scene, new SpiralBulletFormation (bossBody.x - 30.0, bossBody.y, -directionAngle + 20.0));
