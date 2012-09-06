@@ -6,7 +6,7 @@ import nme.display.FPS;
 import StageScene;
 
 // ゲームを実行するクラス
-class Main extends Sprite {
+class NMEShoot extends Sprite {
 
   var currentScene : Scene;
   var fpsTextField : FPS;

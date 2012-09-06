@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <project>
 	
-  <app title="Shoot" file="Shoot" main="Main" package="com.naokirin.example.shoot" version="1.0.0" company="naokirin" />
+  <app title="NME-SHOOT" file="NMEShoot" main="NMEShoot" package="com.naokirin.example.shoot" version="1.0.0" company="naokirin" />
 	
   <window width="600" height="700" fps="60" orientation="portrait" resizable="false" background="0x99CCFF" />
  	<window width="600" height="700" fps="30" orientation="portrait" resizable="false" background="0x99CCFF" if="html5 || flash" />
