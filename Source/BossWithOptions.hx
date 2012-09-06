@@ -1,6 +1,7 @@
 import Enemy;
 import nme.Lib;
 
+// ボス本体
 class BossBody extends Enemy {
 
   static inline var GRAPHIC_PATH = "images/BossBody.png";
@@ -30,6 +31,7 @@ class BossBody extends Enemy {
   }
 }
 
+// ボスの誘導弾
 class BossOption extends Enemy {
   static inline var MAX_ANGLE_RATE : Float = 40.0;
   static inline var SPEED_PER_SECOND = 240.0;
@@ -160,24 +162,16 @@ class BossWithOptions extends EnemyFormation {
         GameObjectManager.addEnemyFormation (scene, this);
         weaponChange = true;
       }
-      var perAngle = 6.0;
+      var anglePerBullet = 6.0;
       if (frameCount % (2/60 * Common.getFrameRate ()) == 0) {
       
-        var directionAngle = (frameCount % (360 * perAngle / Common.getFrameRate () * 60.0)) * perAngle * Common.perFrameRate (60);
+        var directionAngle = (frameCount % (360 * anglePerBullet / Common.getFrameRate () * 60.0)) * anglePerBullet * Common.perFrameRate (60);
       GameObjectManager.addEnemyFormation (scene, new SpiralBulletFormation (bossBody.x + 30.0, bossBody.y, directionAngle - 20.0));
       
       GameObjectManager.addEnemyFormation (scene, new SpiralBulletFormation (bossBody.x - 30.0, bossBody.y, -directionAngle + 20.0));
       }
-
-      if (frameCount %  (Common.getFrameRate () * 50/60) == 0) {
-        GameObjectManager.addEnemyFormation (scene, new SpiralBulletFormation (bossBody.x + 50.0, bossBody.y + bossBody.graphic.height / 2.0, -10.0));
-        GameObjectManager.addEnemyFormation (scene, new SpiralBulletFormation (bossBody.x - 50.0, bossBody.y + bossBody.graphic.height / 2.0, -10.0));
-        GameObjectManager.addEnemyFormation (scene, new SpiralBulletFormation (bossBody.x + 50.0, bossBody.y + bossBody.graphic.height / 2.0, 10.0));
-        GameObjectManager.addEnemyFormation (scene, new SpiralBulletFormation (bossBody.x - 50.0, bossBody.y + bossBody.graphic.height / 2.0, 10.0));
-      }
     }
 
-    
     if (bossBody.hp <= 0 && GameObjectManager.myShip.active)
       GameObjectManager.removeAllEnemyFormations (scene);
   }
