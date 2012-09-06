@@ -46,7 +46,7 @@ class Stage1Scene extends GameScene {
       var nextStage = new Stage2Scene ();
       return Next (nextStage);
     }
-    return gameContinue(Stage1Scene);
+    return gameContinue(StartScene);
   }
 
 
@@ -113,7 +113,7 @@ class Stage2Scene extends GameScene {
       var nextStage = new Stage3Scene ();
       return Next (nextStage);
     }
-    return gameContinue(Stage1Scene);
+    return gameContinue(StartScene);
   }
 }
 
@@ -143,6 +143,6 @@ class Stage3Scene extends GameScene {
     else if (!boss.active && GameObjectManager.myShip.active)
       return Next (new Stage1Scene ());
 
-    return gameContinue(Stage3Scene);
+    return gameContinue(StartScene);
   }
 }
