@@ -20,6 +20,7 @@ class GameObjectManager {
     for (bullet in bullets) { bullet.update (scene); }
     deleteOutsideObject (scene);
     for (enemyFormation in enemyFormations) { enemyFormation.update (scene); }
+    ++frameCountForBullet;
   }
 
   public static function fireBullet (scene : Scene) {

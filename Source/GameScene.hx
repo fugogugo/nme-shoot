@@ -23,9 +23,7 @@ class GameScene extends Scene {
   }
 
   // 初期化
-  public function initialize () {
-    GameObjectManager.frameCountForBullet = Common.frameRate / MyShip.BULLET_RATE;
-
+  function initialize () {
     if (GameObjectManager.myShip == null) {
       GameObjectManager.myShip = new MyShip ();
     }
@@ -42,7 +40,7 @@ class GameScene extends Scene {
     continueTextField.visible = false;
     addChild (continueTextField);
 
-    windowWidth = Common.width; windowHeight = Common.height;
+    windowWidth = Common.WIDTH; windowHeight = Common.HEIGHT;
   }
 
   override public function update () : NextScene {
@@ -76,7 +74,7 @@ class GameScene extends Scene {
   function gameContinue (sceneClass : Class<Dynamic>) {
     if (!GameObjectManager.myShip.active) {
       updateTextField (continueTextField, "Press 'x' to Continue!",
-                       200.0, Common.height/2.0, 300.0, 30.0);
+                       200.0, Common.HEIGHT/2.0, 300.0, 30.0);
       continueTextField.visible = true;
     }
 

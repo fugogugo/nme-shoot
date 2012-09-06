@@ -22,8 +22,8 @@ class Bullet extends Mover {
   }
 
   public function deleteOutsideBullet (scene : Scene) {
-    if (x < -50.0 || x > Common.width + 50.0
-        || y < -50.0 || y > Common.height + 50.0 ) {
+    if (x < -50.0 || x > Common.WIDTH + 50.0
+        || y < -50.0 || y > Common.HEIGHT + 50.0 ) {
       GameObjectManager.removeBullet (scene, this);
     }
   }

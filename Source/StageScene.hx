@@ -9,7 +9,7 @@ import nme.text.TextFormatAlign;
 // Stage1
 class Stage1Scene extends GameScene {
 
-  var stageEndSec = 17.0;
+  static inline var STAGE_END_SEC = 17.0;
 
   var titleTextField : TextField;
 
@@ -35,14 +35,14 @@ class Stage1Scene extends GameScene {
     super.update ();
 
     if (titleTextField != null) {
-      updateTitleTextField ("New Game Start!", Common.width / 4.0, Common.width / 2.0);
+      updateTitleTextField ("New Game Start!", Common.WIDTH / 4.0, Common.WIDTH / 2.0);
     }
 
-    if (frameCount >= Common.frameRate * 3 && titleTextField != null) {
+    if (frameCount >= Common.getFrameRate () * 3 && titleTextField != null) {
       removeChild (titleTextField); titleTextField = null;
     }
 
-    if (frameCount >= stageEndSec * Common.frameRate && GameObjectManager.myShip.active) {
+    if (frameCount >= STAGE_END_SEC * Common.getFrameRate () && GameObjectManager.myShip.active) {
       var nextStage = new Stage2Scene ();
       return Next (nextStage);
     }
@@ -82,7 +82,7 @@ class Stage1Scene extends GameScene {
 // Stage2
 class Stage2Scene extends GameScene {
 
-  static var stageEndSec = 18.0;
+  static inline var STAGE_END_SEC = 18.0;
   
   public function new () {
     super ();
@@ -109,7 +109,7 @@ class Stage2Scene extends GameScene {
   override public function update () :NextScene {
     super.update ();
 
-    if (frameCount >= stageEndSec * Common.frameRate && GameObjectManager.myShip.active) {
+    if (frameCount >= STAGE_END_SEC * Common.getFrameRate () && GameObjectManager.myShip.active) {
       var nextStage = new Stage3Scene ();
       return Next (nextStage);
     }
@@ -137,7 +137,7 @@ class Stage3Scene extends GameScene {
   override public function update () :NextScene {
     super.update ();
     if (boss.active)
-      updateTextField (bossLifeTextField, "Boss : " + Std.string (boss.enemies[0].hp),
+      updateTextField (bossLifeTextField, "Boss : " + Std.string (boss.hp),
                        400.0, 0.0, 160.0, 20.0);
 
     else if (!boss.active && GameObjectManager.myShip.active)

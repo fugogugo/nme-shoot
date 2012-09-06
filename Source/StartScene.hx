@@ -16,7 +16,7 @@ class StartScene extends Scene {
     titleGraphic.y = - titleGraphic.height / 2.0;
     titleGraphic.alpha = 0.0;
     titleSprite.addChild (titleGraphic);
-    titleSprite.x = Common.width / 2.0;
+    titleSprite.x = Common.WIDTH / 2.0;
     titleSprite.y = 100.0;
     addChild (titleSprite);
 
@@ -25,8 +25,8 @@ class StartScene extends Scene {
     startTextGraphic.x = - startTextGraphic.width / 2.0;
     startTextGraphic.y = - startTextGraphic.height / 2.0;
     startTextGraphicSprite.addChild (startTextGraphic);
-    startTextGraphicSprite.x = Common.width / 2.0;
-    startTextGraphicSprite.y = Common.height / 2.0;
+    startTextGraphicSprite.x = Common.WIDTH / 2.0;
+    startTextGraphicSprite.y = Common.HEIGHT / 2.0;
     startTextGraphic.visible = false;
     addChild (startTextGraphicSprite);
   }

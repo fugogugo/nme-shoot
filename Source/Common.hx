@@ -1,11 +1,11 @@
 import nme.Lib;
 
 class Common {
-  public static var width = 600.0;
-  public static var height = 700.0;
-  public static var frameRate = 60.0;
+  public static inline var WIDTH = 600.0;
+  public static inline var HEIGHT = 700.0;
+  static var frameRate : Float;
 
-  private static var slow = 1.0;
+  static var slow = 1.0;
 
   public static function initialize () {
     frameRate = Lib.stage.frameRate;
@@ -15,6 +15,10 @@ class Common {
     frameRate = Lib.stage.frameRate * slow;
     Common.slow = slow;
     return slow;
+  }
+
+  public static function getFrameRate () {
+    return frameRate;
   }
 
 

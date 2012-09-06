@@ -12,7 +12,7 @@ class Scene extends Sprite {
 
   var frameCount : Int;
 
-  public var scoreTextField : TextField;
+  var scoreTextField : TextField;
   public function new () {
     super ();
     frameCount = 0;

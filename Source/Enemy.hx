@@ -6,7 +6,7 @@ class Enemy extends Mover {
 
   public var score (default, null) : Int;
 
-  public var isCollisionWithBullet : Bool;
+  public var isCollisionWithBullet (default, null) : Bool;
 
   function new (initX:Float, initY:Float, graphic:Sprite) {
     
@@ -27,8 +27,8 @@ class Enemy extends Mover {
 // 複数の敵をまとめて処理するクラス
 class EnemyFormation extends Mover {
 
-  public var enemies (default, null) : Array<Enemy>;
-  public var nonCollisionEnemies (default, null) : Array<Enemy>;
+  var enemies (default, null) : Array<Enemy>;
+  var nonCollisionEnemies (default, null) : Array<Enemy>;
   var appearanceSec (default, null) : Float;
 
   function new () {
@@ -115,8 +115,8 @@ class EnemyFormation extends Mover {
 
     var outsideLength = 100.0;
     var deleteEnemy = function (enemy : Enemy) {
-      if ( enemy.x < -outsideLength || enemy.x > Common.width + outsideLength
-           || enemy.y < -outsideLength || enemy.y > Common.height + outsideLength )
+      if ( enemy.x < -outsideLength || enemy.x > Common.WIDTH + outsideLength
+           || enemy.y < -outsideLength || enemy.y > Common.HEIGHT + outsideLength )
         removeEnemy (enemy);
     }
 
