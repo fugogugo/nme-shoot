@@ -10,6 +10,8 @@ class StartScene extends Scene {
 
   public function new () {
     super ();
+
+    // タイトル 
     var titleSprite = new Sprite ();
     titleGraphic = GraphicCache.loadGraphic (TITLE_GRAPHIC_PATH);
     titleGraphic.x = - titleGraphic.width / 2.0;
@@ -17,7 +19,7 @@ class StartScene extends Scene {
     titleGraphic.alpha = 0.0;
     titleSprite.addChild (titleGraphic);
     titleSprite.x = Common.WIDTH / 2.0;
-    titleSprite.y = 100.0;
+    titleSprite.y = 150.0;
     addChild (titleSprite);
 
     var startTextGraphicSprite = new Sprite ();
@@ -26,7 +28,7 @@ class StartScene extends Scene {
     startTextGraphic.y = - startTextGraphic.height / 2.0;
     startTextGraphicSprite.addChild (startTextGraphic);
     startTextGraphicSprite.x = Common.WIDTH / 2.0;
-    startTextGraphicSprite.y = Common.HEIGHT / 2.0;
+    startTextGraphicSprite.y = Common.HEIGHT / 2.0 + 100.0;
     startTextGraphic.visible = false;
     addChild (startTextGraphicSprite);
   }
@@ -34,8 +36,10 @@ class StartScene extends Scene {
   override public function update () {
     super.update ();
     var alphaSec = 2.5;
-    if (Common.perFrameRate (frameCount) < alphaSec)
+    if (Common.perFrameRate (frameCount) < alphaSec) {
       titleGraphic.alpha = Common.perFrameRate (frameCount) / alphaSec;
+      startTextGraphic.visible = false;
+    }
     else {
       startTextGraphic.visible = true;
       if (KeyboardInput.pressedZ)
