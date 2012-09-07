@@ -3,7 +3,7 @@
 class MyShip extends Mover {
 
   static inline var GRAPHIC_PATH = "images/MyShip.png";
-  static inline var SPEED_PER_SECOND = 180.0;
+  static inline var SPEED_PER_SECOND = 200.0;
   static inline var BULLET_RATE = 10;
 
   var initX : Float;
@@ -22,25 +22,48 @@ class MyShip extends Mover {
   }
 
   override public function update (scene : Scene) {
-    if (KeyboardInput.pressedLeft && x >= 0.0)
+    #if (ios || android || webos)
+    if (Input.touch) {
+      var nextX = Input.touchX - Input.diffMyShipX;
+      var nextY = Input.touchY - Input.diffMyShipY;
+      if (nextX < 0.0) nextX = 0.0;
+      if (nextY < 0.0) nextY = 0.0;
+      if (nextX > Common.WIDTH) nextX = Common.WIDTH;
+      if (nextY > Common.HEIGHT) nextY = Common.HEIGHT;
+      x = nextX;
+      y = nextY;
+    }
+
+    #else
+    if (Input.pressedLeft && x >= 0.0)
       x -= Common.perFrameRate (SPEED_PER_SECOND);
-    if (KeyboardInput.pressedRight && x <= Common.WIDTH)
+    if (Input.pressedRight && x <= Common.WIDTH)
       x += Common.perFrameRate (SPEED_PER_SECOND);    
-    if (KeyboardInput.pressedUp && y >= 0.0)
+    if (Input.pressedUp && y >= 0.0)
       y -= Common.perFrameRate (SPEED_PER_SECOND);
-    if (KeyboardInput.pressedDown && y <= Common.HEIGHT)
+    if (Input.pressedDown && y <= Common.HEIGHT)
       y += Common.perFrameRate (SPEED_PER_SECOND);
+    #end
   }
 
   public function fireBullet (scene : Scene) {
-    if (KeyboardInput.pressedZ
+    #if (ios || android || webos)
+    if (GameObjectManager.getFrameCountForBullet () >= Common.getFrameRate () / BULLET_RATE
+        && active) {
+      GameObjectManager.resetFrameCountForBullet ();
+      addBullets (scene);
+    }
+
+    #else
+    if (Input.pressedZ
         && GameObjectManager.getFrameCountForBullet () >= Common.getFrameRate () / BULLET_RATE
         && active) {
       GameObjectManager.resetFrameCountForBullet ();
       addBullets (scene);
       }
-    if (!KeyboardInput.pressedZ)
+    if (!Input.pressedZ)
       GameObjectManager.setFrameCountForBullet (Std.int (Common.getFrameRate () / BULLET_RATE));
+    #end
   }
 
   function addBullets (scene : Scene) {

@@ -14,9 +14,10 @@ class NMEShoot extends Sprite {
   public function new () {
     super ();
 
-    // fpsごとに呼び出し
+    // フレームごとにイベントが発生
     addEventListener ( Event.ENTER_FRAME, this_onEnterFrame);
-    KeyboardInput.initialize ();
+
+    Input.initialize ();
     Common.initialize ();
     fpsTextField = new FPS (0.0, Common.HEIGHT - 30.0);
     addChild (fpsTextField);

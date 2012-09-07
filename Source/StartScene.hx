@@ -8,6 +8,8 @@ class StartScene extends Scene {
   var titleGraphic : Sprite;
   var startTextGraphic : Sprite;
 
+  var touchContinue : Bool;
+
   public function new () {
     super ();
 
@@ -42,7 +44,13 @@ class StartScene extends Scene {
     }
     else {
       startTextGraphic.visible = true;
-      if (KeyboardInput.pressedZ)
+      #if (ios || android || webos)
+      if (!Input.touch)
+        touchContinue = true;
+      if (Input.touch && touchContinue)
+      #else
+      if (Input.pressedZ)
+      #end
         return Next (new Stage1Scene ());
     }
 

@@ -52,26 +52,23 @@ class Stage1Scene extends GameScene {
 
 
   function updateTitleTextField (title:String, x:Float, y:Float) {
-    titleTextField.x = x;
-    titleTextField.y = y;
     titleTextField.text = title;
     titleTextField.selectable = false;
+    titleTextField.width = 300.0;
 
     var tf = new TextFormat ("_sans", 30, 0x333333);
 
     // jsの場合、TextFieldの幅の設定がうまく行かないので
     // 自力でセンタリングを設定
-    #if (html5||js)
-    var w:Float = Lib.current.stage.stageWidth;
-    var h:Float = Lib.current.stage.stageHeight;
+
+    var w:Float = Common.WIDTH;
+    var h:Float = Common.HEIGHT;
 
     titleTextField.x = (w - titleTextField.width) / 2;
     titleTextField.y = (h - titleTextField.height) / 2;
 
-    #else
-    titleTextField.width = 300.0;
+
     tf.align = TextFormatAlign.CENTER;
-    #end
     
     titleTextField.setTextFormat (tf);
     titleTextField.alpha = 30;

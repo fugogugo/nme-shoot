@@ -13,6 +13,7 @@ import Enemy;
 class GameScene extends Scene {
 
   var continueTextField : TextField;
+  var touchContinue : Bool;
 
   var windowWidth : Float;
   var windowHeight : Float;
@@ -56,13 +57,15 @@ class GameScene extends Scene {
 
   // コンティニュー
   function gameContinue (sceneClass : Class<Dynamic>) {
+    #if (ios || android || webos)
     if (!GameObjectManager.myShip.active) {
-      updateTextField (continueTextField, "Press 'x' to Continue!",
+      updateTextField (continueTextField, "touch to Continue!",
                        200.0, Common.HEIGHT/2.0, 300.0, 30.0);
       continueTextField.visible = true;
     }
 
-    if (!GameObjectManager.myShip.active && KeyboardInput.pressedX) {
+
+    if (!GameObjectManager.myShip.active && Input.touch && touchContinue ) {
       GameObjectManager.myShip = new MyShip ();
       GameObjectManager.removeAllBullets (this);
       GameObjectManager.removeAllEnemyFormations (this);
@@ -70,6 +73,26 @@ class GameScene extends Scene {
       GameObjectManager.totalScore = Std.int (GameObjectManager.totalScore / 2.0);
       return Next (Type.createInstance (sceneClass, []));
     }
+    if (!Input.touch)
+      touchContinue = true;
+
+    #else
+    if (!GameObjectManager.myShip.active) {
+      updateTextField (continueTextField, "Press 'x' to Continue!",
+                       200.0, Common.HEIGHT/2.0, 300.0, 30.0);
+      continueTextField.visible = true;
+    }
+
+    if (!GameObjectManager.myShip.active && Input.pressedX) {
+      GameObjectManager.myShip = new MyShip ();
+      GameObjectManager.removeAllBullets (this);
+      GameObjectManager.removeAllEnemyFormations (this);
+      // スコアを半分にする
+      GameObjectManager.totalScore = Std.int (GameObjectManager.totalScore / 2.0);
+      return Next (Type.createInstance (sceneClass, []));
+    }
+    #end
+
     return Remaining;
   }
 }

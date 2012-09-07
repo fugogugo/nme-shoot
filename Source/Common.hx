@@ -1,8 +1,14 @@
 import nme.Lib;
 
 class Common {
+  #if (ios)
+  public static inline var WIDTH = 640;
+  public static inline var HEIGHT = 960;
+  #else
   public static inline var WIDTH = 600.0;
   public static inline var HEIGHT = 700.0;
+  #end
+
   static var frameRate : Float;
 
   static var slow = 1.0;
