@@ -56,7 +56,7 @@ class GameScene extends Scene {
 
 
   // コンティニュー
-  function gameContinue (sceneClass : Class<Dynamic>) {
+  function continueGame <T : Scene> (sceneClass : Class<T>) {
     #if (ios || android || webos)
     if (!GameObjectManager.myShip.active) {
       updateTextField (continueTextField, "touch to Continue!",
