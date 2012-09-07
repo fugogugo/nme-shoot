@@ -1,13 +1,8 @@
-import nme.display.Sprite;
-import Scene;
-
-import nme.Lib;
 import nme.text.TextField;
-import nme.text.TextFormat;
-import nme.text.TextFormatAlign;
-import com.eclecticdesignstudio.motion.Actuate;
-
+import Scene;
 import Enemy;
+
+using Lambda;
 
 // ゲームのシーンクラス
 class GameScene extends Scene {
@@ -29,11 +24,8 @@ class GameScene extends Scene {
       GameObjectManager.myShip = new MyShip ();
     }
     addChild ( GameObjectManager.myShip );
-    for (bullet in GameObjectManager.bullets)
-      addChild (bullet);
-
-    for (enemyFormation in GameObjectManager.enemyFormations)
-      addChild (enemyFormation);
+    GameObjectManager.bullets.map (addChild);
+    GameObjectManager.enemyFormations.map (addChild);
     
     scoreTextField = new TextField ();
     addChild (scoreTextField);
@@ -57,42 +49,37 @@ class GameScene extends Scene {
 
   // コンティニュー
   function continueGame <T : Scene> (sceneClass : Class<T>) {
+    var func = function (text : String, flag : Bool) {
+      if (!GameObjectManager.myShip.active) {
+        updateTextField (continueTextField, text,
+                         200.0, Common.HEIGHT/2.0, 300.0, 30.0);
+        continueTextField.visible = true;
+      }
+
+      if (flag) {
+        GameObjectManager.myShip = new MyShip ();
+        GameObjectManager.removeAllBullets (this);
+        GameObjectManager.removeAllEnemyFormations (this);
+        // スコアを半分にする
+        GameObjectManager.totalScore = Std.int (GameObjectManager.totalScore / 2.0);
+        return Next (Type.createInstance (sceneClass, []));
+      }
+
+      #if (ios || android || webos)
+      if (!Input.touch)
+        touchContinue = true;
+      #end
+
+      return Remaining;
+    }
+
     #if (ios || android || webos)
-    if (!GameObjectManager.myShip.active) {
-      updateTextField (continueTextField, "touch to Continue!",
-                       200.0, Common.HEIGHT/2.0, 300.0, 30.0);
-      continueTextField.visible = true;
-    }
-
-
-    if (!GameObjectManager.myShip.active && Input.touch && touchContinue ) {
-      GameObjectManager.myShip = new MyShip ();
-      GameObjectManager.removeAllBullets (this);
-      GameObjectManager.removeAllEnemyFormations (this);
-      // スコアを半分にする
-      GameObjectManager.totalScore = Std.int (GameObjectManager.totalScore / 2.0);
-      return Next (Type.createInstance (sceneClass, []));
-    }
-    if (!Input.touch)
-      touchContinue = true;
+    return func ("touch to Continue!",
+                 !GameObjectManager.myShip.active && Input.touch && touchContinue);
 
     #else
-    if (!GameObjectManager.myShip.active) {
-      updateTextField (continueTextField, "Press 'x' to Continue!",
-                       200.0, Common.HEIGHT/2.0, 300.0, 30.0);
-      continueTextField.visible = true;
-    }
-
-    if (!GameObjectManager.myShip.active && Input.pressedX) {
-      GameObjectManager.myShip = new MyShip ();
-      GameObjectManager.removeAllBullets (this);
-      GameObjectManager.removeAllEnemyFormations (this);
-      // スコアを半分にする
-      GameObjectManager.totalScore = Std.int (GameObjectManager.totalScore / 2.0);
-      return Next (Type.createInstance (sceneClass, []));
-    }
+    return func ("Press 'x' to Continue!",
+                 !GameObjectManager.myShip.active && Input.pressedX);
     #end
-
-    return Remaining;
   }
 }

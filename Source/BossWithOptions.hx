@@ -1,5 +1,4 @@
 import Enemy;
-import nme.Lib;
 
 // ボス本体
 class BossBody extends Enemy {

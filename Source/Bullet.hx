@@ -1,6 +1,3 @@
-import nme.display.Sprite;
-import nme.Assets;
-import nme.Lib;
 
 class Bullet extends Mover {
   static inline var SPEED_PER_SECOND = 500.0;

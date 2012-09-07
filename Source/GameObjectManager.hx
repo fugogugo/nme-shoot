@@ -1,5 +1,3 @@
-import nme.Lib;
-
 import Enemy;
 
 class GameObjectManager {

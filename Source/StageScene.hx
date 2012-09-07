@@ -1,7 +1,6 @@
 import KiteEnemy;
 import BossWithOptions;
 import Scene;
-import nme.Lib;
 import nme.text.TextField;
 import nme.text.TextFormat;
 import nme.text.TextFormatAlign;

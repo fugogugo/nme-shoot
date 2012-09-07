@@ -1,5 +1,6 @@
 import nme.display.Sprite;
-import nme.Lib;
+
+using Lambda;
 
 // 敵クラス
 class Enemy extends Mover {
@@ -21,7 +22,6 @@ class Enemy extends Mover {
   }
 
 }
-
 
 
 // 複数の敵をまとめて処理するクラス
@@ -50,21 +50,17 @@ class EnemyFormation extends Mover {
         enemy.active = true;
         enemy.update (scene);
       };
-      for (enemy in enemies) {
-        enemyUpdate (enemy);
-      }
-      for (enemy in nonCollisionEnemies) {
-        enemyUpdate (enemy);
-      }
+
+      enemies.iter (enemyUpdate);
+      nonCollisionEnemies.iter (enemyUpdate);
       active = true;
       visible = true;
     }
     else {
       visible = false;
-      for (enemy in enemies)
-        enemy.visible = false;
-      for (enemy in nonCollisionEnemies)
-        enemy.visible = false;
+      var visibleFalse = function (enemy : Enemy) { enemy.visible = false; };
+      enemies.iter (visibleFalse);
+      nonCollisionEnemies.iter (visibleFalse);
     }
   }
 
@@ -103,12 +99,8 @@ class EnemyFormation extends Mover {
       }
     }
 
-    for (enemy in enemies) {
-      collisionProcedure (enemy);
-    }
-    for (enemy in nonCollisionEnemies) {
-      collisionProcedure (enemy);
-    }
+    enemies.iter (collisionProcedure);
+    nonCollisionEnemies.iter (collisionProcedure);
   }
 
   public function deleteOutsideEnemy (scene : Scene) {
@@ -120,11 +112,8 @@ class EnemyFormation extends Mover {
         removeEnemy (enemy);
     }
 
-    for (enemy in enemies)
-      deleteEnemy (enemy);
-
-    for (enemy in nonCollisionEnemies)
-      deleteEnemy (enemy);
+    enemies.iter (deleteEnemy);
+    nonCollisionEnemies.iter (deleteEnemy);
 
     if (enemies.length <= 0 && nonCollisionEnemies.length <= 0)
       GameObjectManager.removeEnemyFormation (scene, this);

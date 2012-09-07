@@ -1,4 +1,3 @@
-import nme.Lib;
 import Enemy;
 
 // 凧型の敵
