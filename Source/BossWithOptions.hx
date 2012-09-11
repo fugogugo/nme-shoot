@@ -36,28 +36,28 @@ class BossOption extends Enemy {
   
   static inline var GRAPHIC_PATH = "images/BossOption.png";
 
-  public function new (initX : Float, initY : Float, initAngle : Float) {
+  public function new (initX : Float, initY : Float, initRotation : Float) {
     setGraphic (GRAPHIC_PATH);
     super (initX, initY, graphic);
     hitRange = 15.0;
     hp = 5;
     score = 10;
     isCollisionWithBullet = false;
-    setAngle (initAngle);
+    rotation = initRotation;
   }
 
   override public function update (scene : Scene) {
     super.update (scene);
     var angle = -Common.radToDeg (Math.atan2 (GameObjectManager.myShip.x - x, GameObjectManager.myShip.y - y));
 
-    if (angle - this.angle < Common.perFrameRate (-MAX_ANGLE_RATE))
-      angle = this.angle - Common.perFrameRate (MAX_ANGLE_RATE);
-    else if (angle - this.angle > Common.perFrameRate (MAX_ANGLE_RATE))
-      angle = this.angle + Common.perFrameRate (MAX_ANGLE_RATE);
+    if (angle - this.rotation < Common.perFrameRate (-MAX_ANGLE_RATE))
+      angle = this.rotation - Common.perFrameRate (MAX_ANGLE_RATE);
+    else if (angle - this.rotation > Common.perFrameRate (MAX_ANGLE_RATE))
+      angle = this.rotation + Common.perFrameRate (MAX_ANGLE_RATE);
 
-    setAngle (angle);
-    x -= Math.sin (Common.degToRad (this.angle)) * Common.perFrameRate (SPEED_PER_SECOND);
-    y += Math.cos (Common.degToRad (this.angle)) * Common.perFrameRate (SPEED_PER_SECOND);
+    rotation = angle;
+    x -= Math.sin (Common.degToRad (this.rotation)) * Common.perFrameRate (SPEED_PER_SECOND);
+    y += Math.cos (Common.degToRad (this.rotation)) * Common.perFrameRate (SPEED_PER_SECOND);
   }
 }
 

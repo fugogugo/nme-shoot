@@ -7,9 +7,6 @@ class Mover extends Sprite {
   // 当たり判定の範囲
   public var hitRange (default, null) : Float;
 
-  // 角度
-  public var angle (default, setAngle) : Float;
-
   // スケール
   public var scale (default, setScale) : Float;
 
@@ -74,12 +71,6 @@ class Mover extends Sprite {
   public function setScale (scale : Float) {
     scaleX = scale; scaleY = scale;
     return this.scale = scale;
-  }
-
-  public function setAngle (angle : Float) {
-    rotation = angle;
-    
-    return this.angle = angle;
   }
 
   // 削除時のエフェクト (サブクラスでオーバーライドする)

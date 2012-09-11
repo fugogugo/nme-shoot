@@ -2,7 +2,7 @@
 class Bullet extends Mover {
   static inline var SPEED_PER_SECOND = 500.0;
 
-  public function new (x:Float, y:Float, angle:Float) {
+  public function new (x:Float, y:Float, rotation:Float) {
     
     setGraphic ("images/Bullet01.png");
     super (x, y, graphic);
@@ -10,12 +10,12 @@ class Bullet extends Mover {
     hp = 0;
     power = 1;
     hitRange = 10.0;
-    setAngle (angle);
+    this.rotation = rotation;
   }
 
   override public function update (scene : Scene) {
-    x += Math.sin (Common.degToRad (this.angle)) * Common.perFrameRate (SPEED_PER_SECOND);
-    y -= Math.cos (Common.degToRad (this.angle)) * Common.perFrameRate (SPEED_PER_SECOND);
+    x += Math.sin (Common.degToRad (this.rotation)) * Common.perFrameRate (SPEED_PER_SECOND);
+    y -= Math.cos (Common.degToRad (this.rotation)) * Common.perFrameRate (SPEED_PER_SECOND);
   }
 
   public function deleteOutsideBullet (scene : Scene) {
