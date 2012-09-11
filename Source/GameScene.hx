@@ -48,7 +48,7 @@ class GameScene extends Scene {
 
 
   // コンティニュー
-  function continueGame <T : Scene> (sceneClass : Class<T>) {
+  function continueGame (sceneClass : Class<Scene>) {
     var func = function (text : String, flag : Bool) {
       if (!GameObjectManager.myShip.active) {
         updateTextField (continueTextField, text,
