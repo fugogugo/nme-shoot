@@ -2,7 +2,7 @@ import nme.Lib;
 
 class Common {
   #if (ios)
-  public static inline var WIDTH = 640;
+  public static inline var WIDTH = 600;
   public static inline var HEIGHT = 960;
   #else
   public static inline var WIDTH = 600.0;
