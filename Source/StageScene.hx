@@ -34,7 +34,7 @@ class Stage1Scene extends GameScene {
     super.update ();
 
     if (titleTextField != null) {
-      updateTitleTextField ("New Game Start!", Common.WIDTH / 4.0, Common.WIDTH / 2.0);
+      updateTitleTextField ("New Game Start!");
     }
 
     if (frameCount () >= Common.getFrameRate () * 3 && titleTextField != null) {
@@ -50,7 +50,7 @@ class Stage1Scene extends GameScene {
   }
 
 
-  function updateTitleTextField (title:String, x:Float, y:Float) {
+  function updateTitleTextField (title:String) {
     titleTextField.text = title;
     titleTextField.selectable = false;
     titleTextField.width = 300.0;
