@@ -13,18 +13,8 @@ class Input {
   public static var touchX : Float = 0.0;
   public static var touchY : Float = 0.0;
 
-  #else
-  public static var pressedUp : Bool = false;
-  public static  var pressedDown : Bool = false;
-  public static var pressedLeft : Bool = false;
-  public static var pressedRight : Bool = false;
-
-  public static var pressedZ : Bool = false;
-  public static var pressedX : Bool = false;
-  #end
-  // キーイベントの登録
+  // タッチイベントの登録
   public static function initialize () {
-    #if (ios || android || webos)
     if (Multitouch.supportsTouchEvents) {
 			Multitouch.inputMode = MultitouchInputMode.TOUCH_POINT;
 			
@@ -32,24 +22,8 @@ class Input {
 			Lib.current.stage.addEventListener(TouchEvent.TOUCH_MOVE, touch_onTouchMove);
 			Lib.current.stage.addEventListener(TouchEvent.TOUCH_END, touch_onTouchEnd);
 		}
-    #else
-    KeyBinding.addOnPress (Keyboard.UP, keyboard_onPressUp);
-    KeyBinding.addOnPress (Keyboard.DOWN, keyboard_onPressDown);
-    KeyBinding.addOnRelease (Keyboard.UP, keyboard_onReleaseUp);
-    KeyBinding.addOnRelease (Keyboard.DOWN, keyboard_onReleaseDown);
-    KeyBinding.addOnPress (Keyboard.LEFT, keyboard_onPressLeft);
-    KeyBinding.addOnPress (Keyboard.RIGHT, keyboard_onPressRight);
-    KeyBinding.addOnRelease (Keyboard.LEFT, keyboard_onReleaseLeft);
-    KeyBinding.addOnRelease (Keyboard.RIGHT, keyboard_onReleaseRight);
-
-    KeyBinding.addOnPress ("z", keyboard_onPressZ);
-    KeyBinding.addOnRelease ("z", keyboard_onReleaseZ);
-    KeyBinding.addOnPress ("x", keyboard_onPressX);
-    KeyBinding.addOnRelease ("x", keyboard_onReleaseX);
-    #end
   }
 
-  #if (ios || android || webos)
   static function touch_onTouchBegin (event : TouchEvent) {
     touch = true;
     touchX = event.stageX;
@@ -69,7 +43,33 @@ class Input {
     touch = false;
   }
 
+
   #else
+  public static var pressedUp : Bool = false;
+  public static  var pressedDown : Bool = false;
+  public static var pressedLeft : Bool = false;
+  public static var pressedRight : Bool = false;
+
+  public static var pressedZ : Bool = false;
+  public static var pressedX : Bool = false;
+
+  // キーイベントの登録
+  public static function initialize () {
+    KeyBinding.addOnPress (Keyboard.UP, keyboard_onPressUp);
+    KeyBinding.addOnPress (Keyboard.DOWN, keyboard_onPressDown);
+    KeyBinding.addOnRelease (Keyboard.UP, keyboard_onReleaseUp);
+    KeyBinding.addOnRelease (Keyboard.DOWN, keyboard_onReleaseDown);
+    KeyBinding.addOnPress (Keyboard.LEFT, keyboard_onPressLeft);
+    KeyBinding.addOnPress (Keyboard.RIGHT, keyboard_onPressRight);
+    KeyBinding.addOnRelease (Keyboard.LEFT, keyboard_onReleaseLeft);
+    KeyBinding.addOnRelease (Keyboard.RIGHT, keyboard_onReleaseRight);
+
+    KeyBinding.addOnPress ("z", keyboard_onPressZ);
+    KeyBinding.addOnRelease ("z", keyboard_onReleaseZ);
+    KeyBinding.addOnPress ("x", keyboard_onPressX);
+    KeyBinding.addOnRelease ("x", keyboard_onReleaseX);
+  }
+
   static function keyboard_onPressUp () : Void { pressedUp = true; }
   static function keyboard_onPressDown () : Void { pressedDown = true; }
   static function keyboard_onReleaseUp () : Void { pressedUp = false; }
@@ -83,5 +83,7 @@ class Input {
   static function keyboard_onReleaseZ () : Void { pressedZ = false; }
   static function keyboard_onPressX () : Void { pressedX = true; }
   static function keyboard_onReleaseX () : Void { pressedX = false; }
+
+
   #end
 }
