@@ -10,7 +10,7 @@ class BossBody extends Enemy {
   static inline var MOVING_Y_SEC = 6.0;
 
   public function new (initX : Float, initY : Float) {
-    setGraphic (GRAPHIC_PATH);
+    setGraphicPath (GRAPHIC_PATH);
     super (initX, initY, graphic);
     hitRange = 95.0;
     hp = 1000;
@@ -37,7 +37,7 @@ class BossOption extends Enemy {
   static inline var GRAPHIC_PATH = "images/BossOption.png";
 
   public function new (initX : Float, initY : Float, initRotation : Float) {
-    setGraphic (GRAPHIC_PATH);
+    setGraphicPath (GRAPHIC_PATH);
     super (initX, initY, graphic);
     hitRange = 15.0;
     hp = 5;
@@ -70,7 +70,7 @@ class SpiralBullet extends Enemy {
   static inline var GRAPHIC_PATH = "images/SpiralBullet.png";
 
   public function new (initX : Float, initY : Float, directionAngle : Float) {
-    setGraphic (GRAPHIC_PATH);
+    setGraphicPath (GRAPHIC_PATH);
     super (initX, initY, graphic);
     hitRange = 15.0;
     isCollisionWithBullet = false;

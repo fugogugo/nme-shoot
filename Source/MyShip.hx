@@ -12,7 +12,7 @@ class MyShip extends Mover {
   public function new () {
     initX = Common.WIDTH / 2.0;
     initY = Common.HEIGHT - 100.0;
-    setGraphic (GRAPHIC_PATH);
+    setGraphicPath (GRAPHIC_PATH);
     
     super (initX, initY, graphic);
     hp = 1;

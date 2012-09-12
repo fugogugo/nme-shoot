@@ -10,7 +10,7 @@ class KiteEnemy extends Enemy {
   var random : Bool;
 
   public function new (initX : Float, initY : Float, speedPerSecond : Float) {
-    setGraphic (GRAPHIC_PATH);
+    setGraphicPath (GRAPHIC_PATH);
     super (initX, initY, graphic);
     hitRange = 15.0;
     hp = 10;

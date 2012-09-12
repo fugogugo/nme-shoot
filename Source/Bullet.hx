@@ -4,7 +4,7 @@ class Bullet extends Mover {
 
   public function new (x:Float, y:Float, rotation:Float) {
     
-    setGraphic ("images/Bullet01.png");
+    setGraphicPath ("images/Bullet01.png");
     super (x, y, graphic);
 
     hp = 0;

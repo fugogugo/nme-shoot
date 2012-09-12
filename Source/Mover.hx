@@ -62,7 +62,7 @@ class Mover extends Sprite {
     return dx*dx + dy*dy < hit*hit;
   }
 
-  function setGraphic (path:String) {
+  function setGraphicPath (path:String) {
     graphic = GraphicCache.loadGraphic (path);
     graphic.x = - graphic.width / 2.0;
     graphic.y = - graphic.height / 2.0;
