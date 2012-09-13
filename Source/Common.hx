@@ -20,7 +20,6 @@ class Common {
   public static function setSlow (slow : Float) {
     frameRate = Lib.stage.frameRate * slow;
     Common.slow = slow;
-    return slow;
   }
 
   public static function getFrameRate () {

@@ -36,7 +36,7 @@ class Mover extends Sprite {
     hp = 1;
     power = 1;
 
-    setScale (1.0);
+    this.scale = 1.0;
     this.x = x; this.y = y;
 
     graphic.x = - graphic.width / 2.0;
