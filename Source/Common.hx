@@ -1,4 +1,6 @@
+#if (!munit_test)
 import nme.Lib;
+#end
 
 class Common {
   #if (ios)
@@ -14,11 +16,19 @@ class Common {
   static var slow = 1.0;
 
   public static function initialize () {
+    #if (munit_test)
+    frameRate = 60.0;
+    #else
     frameRate = Lib.stage.frameRate;
+    #end
   }
 
   public static function setSlow (slow : Float) {
+    #if (munit_test)
+    frameRate = 60.0 * slow;
+    #else
     frameRate = Lib.stage.frameRate * slow;
+    #end
     Common.slow = slow;
   }
 

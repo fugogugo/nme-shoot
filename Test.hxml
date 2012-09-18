@@ -1,0 +1,47 @@
+## Flash 10+
+-main TestMain
+-lib munit
+-lib hamcrest
+-lib keybinding
+-cp Source
+-D munit_test
+
+-cp Test
+-swf-version 10
+-swf build/as3_test.swf
+
+--next
+
+## JavaScript
+-main TestMain
+-D nme_install_tool
+-lib munit
+-lib hamcrest
+-lib keybinding
+-cp Source
+-D web
+-D munit_test
+
+-cp Test
+--remap flash:nme
+-js build/js_test.js
+-D code_completion
+
+
+--next
+
+## CPP
+-main TestMain
+-D nme_install_tool
+-cp Source
+-cp Test
+-lib keybinding
+-lib munit
+-lib hamcrest
+-D desktop
+-D mac
+-D munit_test
+
+-cpp build/cpp_test/
+--remap flash:nme
+-D code_completion
