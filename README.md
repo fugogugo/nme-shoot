@@ -12,6 +12,11 @@ NME  [>= 3.4.0]
     nme setup mac  
     nme test Shoot.nmml mac  
   
+-iOS の場合  
+
+    nme setup ios
+    nme test Shoot.nmml ios -simulator  
+  
 -Windows の場合  
 
     nme setup windows  
@@ -34,7 +39,7 @@ Export/flash/bin以下のShoot.swfファイルを実行
 http://naokirin.github.com/nme-shoot/
 
 十字キー : 移動  
-zキー    : 弾の発射
+zキー    : 弾の発射  
 xキー    : コンティニュー
 
 ###License
