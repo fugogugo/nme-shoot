@@ -5,7 +5,7 @@ class GameObjectManager {
   public static var myShip : MyShip;
   
   public static var bullets : Array<Bullet> = new Array<Bullet> ();
-  public static var enemyFormations : Array<EnemyFormation> = new Array<EnemyFormation> ();
+  public static var enemies : Array<Enemy> = new Array<Enemy> ();
   
   public static var totalScore : Int = 0;
 
@@ -17,13 +17,13 @@ class GameObjectManager {
   }
 
   public static function update (scene : Scene) {
-    if (myShip != null && bullets != null && enemyFormations != null) {
+    if (myShip != null && bullets != null && enemies != null) {
       detectCollision (scene);
       myShip.update (scene);
       fireBullet (scene);
       for (bullet in bullets) { bullet.update (scene); }
       deleteOutsideObject (scene);
-      for (enemyFormation in enemyFormations) { enemyFormation.update (scene); }
+      for (enemy in enemies) { enemy.update (scene); }
     }
     ++frameCountForBullet;
   }
@@ -46,8 +46,8 @@ class GameObjectManager {
   }
 
   static function deleteOutsideEnemy (scene : Scene) {
-    for (enemyFormation in enemyFormations) {
-      enemyFormation.deleteOutsideEnemy (scene);
+    for (enemy in enemies) {
+      enemy.deleteOutsideEnemy (scene);
     }
   }
 
@@ -64,34 +64,34 @@ class GameObjectManager {
     bullets = new Array<Bullet> ();
   }
 
-  public static function addEnemyFormation (scene : Scene, enemyFormation : EnemyFormation) {
-    enemyFormations.push (enemyFormation);
-    scene.addChild (enemyFormation);
+  public static function addEnemy (scene : Scene, enemy : Enemy) {
+    enemies.push (enemy);
+    scene.addChild (enemy);
   }
 
-  public static function removeEnemyFormation (scene : Scene, enemyFormation : EnemyFormation) {
-    enemyFormations.remove (enemyFormation);
-    if (scene.contains (enemyFormation))
-      scene.removeChild (enemyFormation);
+  public static function removeEnemy (scene : Scene, enemy : Enemy) {
+    enemies.remove (enemy);
+    if (scene.contains (enemy))
+      scene.removeChild (enemy);
   }
 
-  public static function removeAllEnemyFormations (scene : Scene) {
-    for (enemyFormation in enemyFormations)
-      if (scene.contains (enemyFormation))
-        scene.removeChild (enemyFormation);
-    enemyFormations = new Array<EnemyFormation> ();
+  public static function removeAllEnemies (scene : Scene) {
+    for (enemy in enemies)
+      if (scene.contains (enemy))
+        scene.removeChild (enemy);
+    enemies = new Array<Enemy> ();
   }
 
   // 当たり判定の処理
   public static function detectCollision (scene : Scene) {
     for (bullet in bullets) {
-      for (enemyFormation in enemyFormations) {
-        enemyFormation.detectCollisionWithBullet (scene, bullet);
+      for (enemy in enemies) {
+        enemy.detectCollisionWithBullet (scene, bullet);
       }
     }
     if (myShip.active) {
-      for (enemyFormation in enemyFormations) {
-        enemyFormation.detectCollisionWithMyShip (scene);
+      for (enemy in enemies) {
+        enemy.detectCollisionWithMyShip (scene);
       }
     }
   }

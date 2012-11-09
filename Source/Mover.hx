@@ -46,7 +46,7 @@ class Mover extends Sprite {
   }
 
   // フレームごとの処理
-  public function update (scene : Scene) : Void {
+  function update (scene : Scene) : Void {
     if (startFrameCount == null) {
       startFrameCount = GameObjectManager.getTotalFrameCount ();
     }

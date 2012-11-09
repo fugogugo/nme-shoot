@@ -12,21 +12,21 @@ class Stage1Scene extends GameScene {
 
   var titleTextField : TextField;
 
-
   public function new () {
     super ();
 
     titleTextField = new TextField ();
     addChild (titleTextField);
     
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (50.0, 0.0, 5.0));
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (200.0, 0.0, 5.0));
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (250.0, 0.0, 8.0));
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (200.0, 0.0, 9.0));
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (150.0, 0.0, 10.0));
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (250.0, 0.0, 11.0));
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (150.0, 0.0, 12.0));
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (350.0, 0.0, 13.0));
+    var kite = callback(KiteEnemiesPattern.addEnemies, this);
+    kite (50.0, 0.0, 5.0);
+    kite (200.0, 0.0, 5.0);
+    kite (250.0, 0.0, 8.0);
+    kite (200.0, 0.0, 9.0);
+    kite (150.0, 0.0, 10.0);
+    kite (250.0, 0.0, 11.0);
+    kite (150.0, 0.0, 12.0);
+    kite (350.0, 0.0, 13.0);
   }
 
 
@@ -80,27 +80,28 @@ class Stage1Scene extends GameScene {
 class Stage2Scene extends GameScene {
 
   static inline var STAGE_END_SEC = 18.0;
-  
+
   public function new () {
     super ();
-
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (130.0, 0.0, 3.0));
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (200.0, 0.0, 3.0));
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (300.0, 0.0, 3.0));
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (150.0, 0.0, 5.0));
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (320.0, 0.0, 5.0));
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (250.0, 0.0, 6.0));
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (200.0, 0.0, 7.0));
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (90.0, 0.0, 7.0));
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (400.0, 0.0, 7.0));
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (150.0, 0.0, 8.0));
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (260.0, 0.0, 9.0));
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (120.0, 0.0, 10.0));
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (130.0, 0.0, 10.0));
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (140.0, 0.0, 10.0));
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (150.0, 0.0, 10.0));
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (200.0, 0.0, 11.0));
-    GameObjectManager.addEnemyFormation (this, new KiteEnemyFormation (350.0, 0.0, 12.0));
+    
+    var kite = callback(KiteEnemiesPattern.addEnemies, this);
+    kite (130.0, 0.0, 3.0);
+    kite (200.0, 0.0, 3.0);
+    kite (300.0, 0.0, 3.0);
+    kite (150.0, 0.0, 5.0);
+    kite (320.0, 0.0, 5.0);
+    kite (250.0, 0.0, 6.0);
+    kite (200.0, 0.0, 7.0);
+    kite (90.0, 0.0, 7.0);
+    kite (400.0, 0.0, 7.0);
+    kite (150.0, 0.0, 8.0);
+    kite (260.0, 0.0, 9.0);
+    kite (120.0, 0.0, 10.0);
+    kite (130.0, 0.0, 10.0);
+    kite (140.0, 0.0, 10.0);
+    kite (150.0, 0.0, 10.0);
+    kite (200.0, 0.0, 11.0);
+    kite (350.0, 0.0, 12.0);
   }
 
   override public function update () :NextScene {
@@ -115,18 +116,17 @@ class Stage2Scene extends GameScene {
   }
 }
 
-
 // Boss Stage
 class Stage3Scene extends GameScene {
 
-  var boss : BossWithOptions;
   var bossLifeTextField : TextField;
+  var boss : BossBody;
 
   public function new () {
     super ();
 
-    boss = new BossWithOptions ();
-    GameObjectManager.addEnemyFormation (this, boss);
+    boss = new BossBody (0.0, 0.0);
+    GameObjectManager.addEnemy (this, boss);
     bossLifeTextField = new TextField ();
     addChild (bossLifeTextField);
   }

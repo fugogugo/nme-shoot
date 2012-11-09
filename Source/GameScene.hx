@@ -25,7 +25,7 @@ class GameScene extends Scene {
     }
     addChild ( GameObjectManager.myShip );
     GameObjectManager.bullets.map (addChild);
-    GameObjectManager.enemyFormations.map (addChild);
+    GameObjectManager.enemies.map (addChild);
     
     scoreTextField = new TextField ();
     addChild (scoreTextField);
@@ -59,7 +59,7 @@ class GameScene extends Scene {
       if (flag) {
         GameObjectManager.myShip = new MyShip ();
         GameObjectManager.removeAllBullets (this);
-        GameObjectManager.removeAllEnemyFormations (this);
+        GameObjectManager.removeAllEnemies (this);
         // スコアを半分にする
         GameObjectManager.totalScore = Std.int (GameObjectManager.totalScore / 2.0);
         return Next (Type.createInstance (sceneClass, []));
