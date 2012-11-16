@@ -8,13 +8,11 @@ class Enemy extends Mover {
   var appearanceSec (default, null) : Float;
   public var score (default, null) : Int;
   public var isCollisionWithBullet (default, null) : Bool;
-  var updateProcedure : Void -> Void;
 
-  public function new (initX:Float, initY:Float, graphic:Sprite, appearanceSec : Float, update : Void -> Void) {
+  public function new (initX:Float, initY:Float, graphic:Sprite, appearanceSec : Float) {
     
     score = 0;
     this.graphic = graphic;
-    this.updateProcedure = update;
 
     super (initX, initY, graphic);
     visible = false;
@@ -23,17 +21,25 @@ class Enemy extends Mover {
     this.appearanceSec = appearanceSec;
   }
 
+  // appearanceSecで設定された秒数後に実行される
+  function appearedUpdate (scene : Scene) {
+    visible = true;
+    active = true;
+  }
+
+  // appearanceSecで設定された秒数前に実行される
+  function disappearedUpdate (scene : Scene) {
+    visible = false;
+  }
 
   override public function update (scene : Scene) {
     super.update (scene);
 
     if (appearanceSec <= Common.perFrameRate (frameCount ())) {
-      visible = true;
-      active = true;
-      updateProcedure ();
+      appearedUpdate (scene);
     }
     else {
-      visible = false;
+      disappearedUpdate (scene);
     }
   }
 

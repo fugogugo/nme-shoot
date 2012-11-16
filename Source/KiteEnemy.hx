@@ -9,7 +9,9 @@ class KiteEnemy extends Enemy {
 
   var random : Bool;
 
-  function updateProc () {
+  override function appearedUpdate (scene : Scene) {
+    super.appearedUpdate (scene);
+
     if (random)
       x += Math.cos (y/speedPerSecond) * Common.perFrameRate (120.0);
     else
@@ -19,7 +21,7 @@ class KiteEnemy extends Enemy {
 
   public function new (initX : Float, initY : Float, appearanceSec : Float, speedPerSecond : Float) {
     setGraphicPath (GRAPHIC_PATH);
-    super (initX, initY, graphic, appearanceSec, updateProc);
+    super (initX, initY, graphic, appearanceSec);
     hitRange = 15.0;
     hp = 10;
     score = 10;

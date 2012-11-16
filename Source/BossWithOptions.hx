@@ -13,18 +13,17 @@ class BossBody extends Enemy {
 
   public function new (initX : Float, initY : Float) {
     setGraphicPath (GRAPHIC_PATH);
-    super (initX, initY, graphic, 0.0, function () {});
+    super (initX, initY, graphic, 0.0);
     hitRange = 95.0;
     hp = 1000;
     score = 10000;
 
     x = Common.WIDTH / 2.0;
     weaponChange = false;
-
   }
 
-  override public function update (scene : Scene) {
-    super.update (scene);
+  override function appearedUpdate (scene : Scene) {
+    super.appearedUpdate (scene);
     if (Common.perFrameRate (frameCount ()) <= MOVING_Y_SEC)
       y += Common.perFrameRate (MOVING_HEIGHT / MOVING_Y_SEC);
     else if (Common.perFrameRate (frameCount ()) >= SLIDE_START_SEC)
@@ -75,7 +74,7 @@ class BossOption extends Enemy {
 
   public function new (initX : Float, initY : Float, initRotation : Float) {
     setGraphicPath (GRAPHIC_PATH);
-    super (initX, initY, graphic, 0.0, function () {});
+    super (initX, initY, graphic, 0.0);
     hitRange = 15.0;
     hp = 5;
     score = 10;
@@ -83,8 +82,8 @@ class BossOption extends Enemy {
     rotation = initRotation;
   }
 
-  override public function update (scene : Scene) {
-    super.update (scene);
+  override function appearedUpdate (scene : Scene) {
+    super.appearedUpdate (scene);
     var angle = -Common.radToDeg (Math.atan2 (GameObjectManager.myShip.x - x, GameObjectManager.myShip.y - y));
 
     if (angle - this.rotation < Common.perFrameRate (-MAX_ANGLE_RATE))
@@ -109,14 +108,14 @@ class SpiralBullet extends Enemy {
   public function new (initX : Float, initY : Float,
                        directionAngle : Float) {
     setGraphicPath (GRAPHIC_PATH);
-    super (initX, initY, graphic, 0.0, function () {});
+    super (initX, initY, graphic, 0.0);
     hitRange = 15.0;
     isCollisionWithBullet = false;
     this.directionAngle = directionAngle;
   }
 
-  override public function update (scene : Scene) {
-    super.update (scene);
+  override function appearedUpdate (scene : Scene) {
+    super.appearedUpdate (scene);
     x -= Math.sin (Common.degToRad (this.directionAngle)) * Common.perFrameRate (SPEED_PER_SECOND);
     y += Math.cos (Common.degToRad (this.directionAngle)) * Common.perFrameRate (SPEED_PER_SECOND);
   }
